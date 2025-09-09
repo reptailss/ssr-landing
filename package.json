@@ -25,7 +25,7 @@
 		"os-react-ssr-client": "git+https://github.com/reptailss/react-ssr-client.git#master",
 		"os-react-ssr-compiler": "git+https://github.com/reptailss/react-ssr-compiler.git#master",
 		"os-react-ssr-css": "git+https://github.com/reptailss/react-ssr-css.git#master",
-		"os-react-ssr-server": "git+https://github.com/reptailss/admin-panel-builder.git#master",
+		"os-react-ssr-server": "git+https://github.com/reptailss/react-ssr-server.git#master",
 		"react": "18.3.1",
 		"react-dom": "18.3.1",
 		"react-player": "3.3.1",
