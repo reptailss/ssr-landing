@@ -1,0 +1,130 @@
+.card {
+    border-radius: 24px;
+    width: 100%;
+    height: 342px;
+    padding: 92px 12px 22px;
+    overflow: hidden;
+    position: relative;
+}
+
+.desktopImage {
+    display: none;
+}
+
+.mobileImage {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 1;
+}
+
+.overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 2;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.content {
+    height: 155px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding-left: 18px;
+    position: relative;
+    z-index: 3;
+}
+
+.content:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 1px;
+    background-color: #fff;
+    z-index: 3;
+}
+
+.title {
+    font-family: var(--font-family);
+    font-weight: 500;
+    font-size: 28px;
+    line-height: 143%;
+    color: #fff;
+}
+
+.actions {
+    margin-top: 37px;
+    z-index: 3;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 5px;
+    width: 100%;
+}
+
+
+.moreDetailsBtn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color:#FFFFFF;
+}
+
+@media (min-width: 992px) {
+    .card {
+        height: 422px;
+        padding: 160px 21px 25px;
+        overflow: hidden;
+    }
+
+    .mobileImage {
+        display: none;
+    }
+
+    .desktopImage {
+        display: block;
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        object-fit: cover;
+        z-index: 1;
+    }
+
+    .content {
+        padding-left: 42px;
+    }
+
+    .title {
+        font-size: 32px;
+        line-height: 125%;
+        max-width: 462px;
+    }
+
+    .actions {
+        margin-top: 49px;
+    }
+
+    .nextSlideBtn {
+        display: none;
+    }
+
+    .moreDetailsBtn {
+        font-size: 20px;
+    }
+}

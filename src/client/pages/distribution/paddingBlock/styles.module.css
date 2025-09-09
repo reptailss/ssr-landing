@@ -1,0 +1,11 @@
+.root{
+    height: 79px;
+    width: 100%;
+    pointer-events: none;
+}
+
+@media(min-width:992px) {
+    .root{
+        height: 189px;
+    }
+}

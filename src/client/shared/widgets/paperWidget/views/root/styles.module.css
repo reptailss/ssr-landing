@@ -1,0 +1,28 @@
+
+.Wrapper{
+    padding: 48px 0 26px;
+    border-radius: 24px 24px 0 0;
+    width: 100%;
+    background-color: #fff;
+}
+.title {
+    font-family: var(--font-family);
+    font-weight: 500;
+    font-size: 32px;
+    letter-spacing: -0.02em;
+    color: #000;
+    margin-bottom: 26px;
+    width: 100%;
+}
+
+@media (min-width: 992px) {
+    .title {
+        font-size: 48px;
+        text-transform: capitalize;
+        text-align: center;
+    }
+
+    .container{
+        padding: 48px 0 60px;
+    }
+}

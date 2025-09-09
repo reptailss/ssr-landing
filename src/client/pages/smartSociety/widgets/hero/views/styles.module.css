@@ -1,0 +1,60 @@
+.root {
+    padding: 28px 0 15px;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+.title {
+    font-family: var(--font-family);
+    font-weight: 500;
+    font-size: 40px;
+    letter-spacing: -0.02em;
+    color: #fff;
+}
+
+.description {
+    font-family: var(--font-family);
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 150%;
+    letter-spacing: -0.01em;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.video {
+    height: 202px;
+}
+
+
+@media (min-width: 992px) {
+
+    .root {
+        padding: 23px 0 32px;
+    }
+
+    .container {
+        flex-direction: row;
+        gap: 18px;
+    }
+
+    .title {
+        font-size: 48px;
+    }
+
+    .description {
+        font-size: 20px;
+    }
+    .content{
+        width: 50%;
+    }
+
+    .video {
+        width: 50%;
+        height: 347px;
+    }
+
+}

@@ -1,0 +1,104 @@
+.root {
+    padding: 32px 0 74px;
+}
+
+
+.title {
+    font-family: var(--font-family);
+    font-weight: 500;
+    font-size: 32px;
+    letter-spacing: -0.02em;
+    color: #fff;
+}
+
+.list {
+    margin-top: 26px;
+    display: flex;
+    gap: 13px;
+    overflow-y: auto;
+    max-width: 100%;
+    padding-bottom: 14px;
+}
+
+.card {
+    width: 237px;
+    padding: 55px 22px 44px;
+    background-color: #121212;
+    border-radius: 24px;
+    flex-shrink: 0;
+}
+
+.cardImg {
+    object-fit: contain;
+    max-width: 32px;
+    max-height: 32px;
+    height: 100%;
+    width: 100%;
+}
+
+.cardTitle {
+    font-family: var(--font-family);
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 150%;
+    color: rgba(255, 255, 255, 0.7);
+    margin-top: 36px;
+}
+
+.cardDescription {
+    font-family: var(--font-family);
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 150%;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.advantages {
+    margin-top: 14px;
+    padding: 15px 10px 21px 22px;
+    border: 1px solid #3a3a3a;
+    border-radius: 24px;
+}
+
+
+.tags {
+    margin-top: 100px;
+    display: flex;
+    flex-direction: column;
+    gap:27px;
+}
+
+.tag{
+    font-family: var(--font-family);
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 171%;
+    color: #fff;
+    border: 1px solid #3a3a3a;
+    border-radius: 12px;
+    padding: 5px 11px;
+}
+
+@media (min-width: 992px) {
+    .root {
+        padding: 32px 0 51px;
+    }
+
+    .list {
+        margin-top: 17px;
+    }
+
+    .tags {
+        margin-top: 54px;
+        flex-direction: row;
+        gap:11px;
+        flex-wrap: wrap;
+    }
+
+    .tag{
+        font-size: 16px;
+        line-height: 150%;
+    }
+
+
+}

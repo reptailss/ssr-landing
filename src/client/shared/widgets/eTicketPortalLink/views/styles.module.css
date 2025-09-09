@@ -1,0 +1,48 @@
+.root {
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+}
+
+.title {
+    font-family: var(--font-family);
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 140%;
+    color: #fff;
+}
+
+.link {
+    text-decoration: underline;
+    text-decoration-skip-ink: none;
+    color: #fff;
+}
+
+.banner {
+    border-radius: 21px 61px 61px 21px;
+    width: 264px;
+    height: 124px;
+    background-color: #d3dbf9;
+    display: flex;
+    gap: 10px;
+    padding-right: 25px;
+    flex: 0 0 auto;
+}
+
+.image {
+    width: 60%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 21px
+}
+
+@media (min-width: 992px) {
+    .root {
+        flex-direction: row;
+        gap: 21px;
+    }
+
+    .title{
+        max-width: 321px;
+    }
+}

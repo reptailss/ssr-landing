@@ -1,0 +1,102 @@
+.root{
+    padding: 52px 0 32px;
+    background-color: #fff;
+}
+.root:first-child{
+    border-radius: 24px 24px 0 0;
+}
+
+.root:last-child{
+    border-radius: 0 0 24px 24px ;
+}
+
+.disableFirstBorderRadius:first-child {
+    border-radius: 0;
+}
+
+
+.content {
+    font-family: var(--font-family);
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    gap: 23px;
+
+}
+
+
+.cardUl {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.advantages{
+    color: rgba(0, 0, 0, 0.5);
+}
+
+.cardImg {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 21px;
+}
+
+.cardContentWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.cardTitle {
+    font-family: var(--font-family);
+    font-weight: 500;
+    font-size: 32px;
+    letter-spacing: -0.02em;
+    color: #000;
+}
+
+.cardSubtitle {
+    font-family: var(--font-family);
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 140%;
+    letter-spacing: -0.01em;
+    color: #000;
+}
+
+.cardContent ul {
+    list-style: initial;
+}
+
+.cardContent li::marker {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 16px;
+}
+
+
+@media (min-width: 992px) {
+    .root{
+        padding: 60px 0 75px;
+    }
+
+    .card {
+        gap: 44px;
+        flex-direction: row;
+    }
+
+    .cardImg {
+        width: 400px;
+    }
+
+    .root:nth-child(even) .card {
+        flex-direction: row-reverse;
+        background-color: #f2f2f2;
+    }
+
+    .root:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+}

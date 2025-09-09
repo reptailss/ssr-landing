@@ -1,0 +1,17 @@
+{
+	"extends": "./tsconfig.json",
+	"include": [
+		"src/server",
+		"src/common",
+		"src/index.ts"
+	],
+	"exclude": [
+		"admin-public",
+		"dist",
+		"logs",
+		"node_modules",
+		"public",
+		"ssr-server-build",
+		"swagger-build",
+	]
+}

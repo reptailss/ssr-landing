@@ -1,0 +1,39 @@
+.root {
+    width: 100%;
+    display: flex;
+    overflow-y: auto;
+    max-width: 100%;
+    gap:24px;
+    justify-content: center;
+    padding-top: 14px;
+}
+
+.link{
+    font-family: var(--font-family);
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 143%;
+    color: rgba(255, 255, 255, 0.5);
+    max-width: 127px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.active{
+    color: rgba(255, 255, 255, 0.75);
+}
+
+@media(min-width: 992px){
+    .root {
+        width: initial;
+        justify-content: flex-start;
+        padding-top: 27px;
+    }
+
+    .link{
+        max-width: initial;
+    }
+
+
+}

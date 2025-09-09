@@ -1,0 +1,8 @@
+.iconBtn {
+    transition: all .3s;
+    cursor: pointer;
+}
+
+.iconBtn:hover {
+    opacity: .8;
+}

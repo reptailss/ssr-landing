@@ -1,0 +1,100 @@
+{
+	"compilerOptions": {
+		"target": "ES2017",
+		"module": "commonjs",
+		"rootDir": "./src",
+		"sourceMap": true,
+		"outDir": "dist",
+		"esModuleInterop": true,
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true,
+		"forceConsistentCasingInFileNames": true,
+		"strict": true,
+		"strictNullChecks": true,
+		"strictFunctionTypes": true,
+		"skipLibCheck": true,
+		"baseUrl": ".",
+		"types": [
+			"node"
+		],
+		"allowSyntheticDefaultImports": true,
+		"moduleResolution": "node",
+		"paths": {
+			"@common/*": [
+				"src/common/*"
+			],
+			"@modules/*": [
+				"src/server/modules/*"
+			],
+			"@db/*": [
+				"src/server/db/*"
+			],
+			"@constants/*": [
+				"src/server/constants/*"
+			],
+			"@config": [
+				"src/server/config/index.ts"
+			],
+			"@client-ui/*": [
+				"src/client/shared/ui/*"
+			],
+			"@client-utils/*": [
+				"src/client/shared/utils/*"
+			],
+			"@client-pages/*": [
+				"src/client/pages/*"
+			],
+			"@client-pages-default-content/*": [
+				"src/client/pagesDefaultContent/*"
+			],
+			"@client-shared/*": [
+				"src/client/shared/*"
+			],
+			"@client-app/*": [
+				"src/client/app/*"
+			],
+			"@page-default-content/*": [
+				"src/client/pageDefaultContent/*"
+			],
+
+			"@admin-fields/*": [
+				"src/admin/fields/*"
+			],
+			"@admin-content/*": [
+				"src/admin/content/*"
+			],
+			"@admin-managers/*": [
+				"src/admin/managers/*"
+			],
+			"@admin-providers/*": [
+				"src/admin/providers/*"
+			],
+			"@admin-helpers/*": [
+				"src/admin/helpers/*"
+			],
+			"@admin-widgets/*": [
+				"src/admin/widgets/*"
+			]
+		},
+		"plugins": [
+			{
+				"transform": "typescript-transform-paths"
+			}
+		],
+		"jsx": "react"
+	},
+	"ts-node": {
+		"require": [
+			"tsconfig-paths/register"
+		]
+	},
+	"exclude": [
+		"admin-public",
+		"dist",
+		"logs",
+		"node_modules",
+		"public",
+		"ssr-server-build",
+		"swagger-build",
+	],
+}

@@ -1,0 +1,45 @@
+.root {
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.1);
+    background-color: #010101;
+    padding: 48px 30px 65px;
+    border-radius: 24px;
+}
+
+.email {
+    margin-top: 11px;
+}
+
+.btn {
+    margin-top: 27px;
+    width: 100%;
+}
+
+
+.info {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.errorMessage{
+    font-family: var(--font-family);
+    font-weight: 400;
+    font-size: 28px;
+    line-height: 229%;
+    color: #e81b1f;
+}
+
+.successMessage{
+    font-family: var(--font-family);
+    font-weight: 400;
+    font-size: 28px;
+    line-height: 200%;
+    color: #fff;
+}
+
+@media (min-width: 992px) {
+    .root {
+        padding: 52px 54px 61px;
+    }
+}

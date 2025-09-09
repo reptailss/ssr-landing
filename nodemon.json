@@ -1,0 +1,9 @@
+{
+  "ignore": [
+    "logs",
+    "swagger-build",
+    "files",
+    "dist"
+  ],
+  "ext": "ts,js"
+}

@@ -1,0 +1,78 @@
+.root {
+    padding: 52px 0 70px;
+    background-color: #fff;
+}
+
+.root:first-child {
+    border-radius: 24px 24px 0 0;
+}
+
+.root:last-child {
+    border-radius: 0 0 24px 24px;
+}
+
+.disableFirstBorderRadius:first-child {
+    border-radius: 0;
+}
+
+.card {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    gap: 14px;
+}
+
+.cardTitle {
+    font-family: var(--font-family);
+    font-weight: 500;
+    font-size: 32px;
+    letter-spacing: -0.02em;
+    color: #000;
+    width: 100%;
+}
+
+.item {
+    padding: 51px 20px 35px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    width: 100%;
+}
+
+.img {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+}
+
+.content {
+    font-family: var(--font-family);
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 150%;
+    color: #000;
+}
+
+@media (min-width: 992px) {
+    .root {
+        padding: 60px 0 75px;
+    }
+
+    .card {
+        gap: 12px;
+    }
+
+    .root:nth-child(even) .card {
+        background-color: #f2f2f2;
+    }
+
+    .root:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    .item {
+        width: 238px;
+    }
+}

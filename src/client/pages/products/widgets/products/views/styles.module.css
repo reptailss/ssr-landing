@@ -1,0 +1,22 @@
+.root{
+    padding: 9px 0 124px;
+    width: 100%;
+}
+
+.container{
+    display: flex;
+    flex-direction: column;
+    gap:14px;
+    width: 100%;
+}
+
+@media(min-width: 992px) {
+    .root{
+        padding: 18px 0 206px;
+
+    }
+
+    .container{
+        gap:24px;
+    }
+}

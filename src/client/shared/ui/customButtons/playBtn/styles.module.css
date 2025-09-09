@@ -1,0 +1,21 @@
+.playBtn {
+    background-color: #ff5a2c;
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.playBtn::before {
+    content: '';
+    display: block;
+    width: 0;
+    height: 0;
+    border-left: 24px solid white;
+    border-top: 15px solid transparent;
+    border-bottom: 15px solid transparent;
+    margin-left: 2px;
+}

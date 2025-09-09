@@ -1,0 +1,32 @@
+.root {
+    padding: 20px 0 97px;
+    width: 100%;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+}
+
+@media (min-width: 992px) {
+
+    .root {
+        padding: 22px 0 85px;
+    }
+
+    .list {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        column-gap: 20px;
+        row-gap: 80px;
+    }
+
+}

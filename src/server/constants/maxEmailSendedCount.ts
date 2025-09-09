@@ -1,0 +1,1 @@
+export const CONTACT_US_MAX_EMAIL_SEND_COUNT = 7

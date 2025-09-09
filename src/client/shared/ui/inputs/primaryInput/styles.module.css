@@ -1,0 +1,60 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    font-family: sans-serif;
+}
+
+.label {
+    font-family: var(--font-family);
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 178%;
+    color: #fff;
+}
+
+.root {
+    font-family: var(--font-family);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 4px;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 178%;
+    color: #fff;
+    padding: 15px 20px;
+
+}
+
+.textarea{
+    resize:none;
+    height: 125px;
+}
+
+.errorMessage{
+    font-family: var(--font-family);
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 229%;
+    color: #e81b1f;
+}
+
+.errorInput{
+    border: 1px solid #e81b1f;
+}
+
+.helperText{
+    margin-left: auto;
+    font-family: var(--font-family);
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 229%;
+    text-align: right;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.messagesWrapper{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap:10px;
+    flex-wrap: wrap;
+}

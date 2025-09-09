@@ -1,0 +1,139 @@
+.root {
+    background-color: #000;
+    padding: 25px 0 6px;
+    position: relative;
+    overflow: hidden;
+}
+
+.imgMobile {
+    width: 100%;
+    height: 640px;
+    object-fit: cover;
+    position: absolute;
+    left: 0;
+    top: 110px;
+}
+
+.imgDesktop {
+    display: none;
+}
+
+
+.content {
+    z-index: 3;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 212px;
+}
+
+.title {
+    font-family: var(--font-family);
+    font-weight: 500;
+    font-size: 40px;
+    letter-spacing: -0.02em;
+    color: #fff;
+    max-width: 300px;
+}
+
+.description {
+    font-family: var(--font-family);
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 150%;
+    letter-spacing: -0.01em;
+    color: #fff;
+    margin-top: 20px;
+}
+
+.overlay {
+    display: none;
+}
+
+.form {
+    width: 100%;
+}
+
+@media (min-width: 992px) {
+    .root {
+        padding: 205px 0 144px;
+    }
+
+    .root:after {
+        position: absolute;
+        top: 95px;
+        height: 1px;
+        width: 100%;
+        background-color: rgba(255, 255, 255, 0.2);
+        content: "";
+        z-index: 2;
+    }
+
+    .imgMobile {
+        display: none;
+    }
+
+    .imgDesktop {
+        width: 100%;
+        object-fit: cover;
+        position: absolute;
+        left: 0;
+        height: 100%;
+        top: 0;
+        display: block;
+    }
+
+    .toTopImg{
+        object-position: center -420px;
+    }
+
+
+    .content {
+        flex-direction: row;
+        gap: 15px;
+    }
+
+    .info {
+        width: 50%;
+    }
+
+    .title {
+        max-width: initial;
+    }
+
+    .description {
+        margin-top: 25px;
+        max-width: 511px;
+    }
+
+    .form {
+        width: 50%;
+    }
+
+    .overlay {
+        display: block;
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        left: 0;
+        top: 0;
+        z-index: 1;
+        background: linear-gradient(
+                to top,
+                rgba(0, 0, 0, 1) 0%,
+                rgba(0, 0, 0, 0.6) 30%,
+                rgba(0, 0, 0, 0.3) 70%,
+                rgba(0, 0, 0, 0) 100%
+        ),
+        linear-gradient(
+                to bottom,
+                rgba(0, 0, 0, 1) 0%,
+                rgba(0, 0, 0, 0.6) 30%,
+                rgba(0, 0, 0, 0.3) 70%,
+                rgba(0, 0, 0, 0) 100%
+        );
+    }
+
+}

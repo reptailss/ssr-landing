@@ -1,0 +1,28 @@
+.root {
+    padding: 92px 0 44px;
+}
+
+
+.content {
+    font-family: var(--font-family);
+    font-weight: 500;
+    font-size: 24px;
+    letter-spacing: -0.02em;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 39px;
+}
+
+.content span {
+    color: #fff;
+}
+
+@media (min-width: 992px) {
+    .root {
+        padding: 51px 0 156px;
+    }
+
+
+    .content {
+        font-size: 32px;
+    }
+}

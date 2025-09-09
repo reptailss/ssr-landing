@@ -1,0 +1,41 @@
+.modal{
+
+}
+
+.root {
+    background-color: #010101;
+    color: white;
+    padding: 24px 24px 24px;
+    border-radius: 8px;
+    width: 95vw;
+    max-width: 600px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.input{
+
+}
+
+.header {
+    position: sticky;
+    top:-24px;
+    z-index: 5;
+    margin-bottom: 16px;
+    background-color: #010101;
+}
+
+.results {
+    margin-top: 16px;
+    font-size: 14px;
+    color: #ccc;
+    display: flex;
+    flex-direction: column;
+    gap:10px;
+}
+
+
+@media(min-width: 992px) {
+
+}

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Нова заявка</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 30px auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #1a1a1a;
+        }
+        .field {
+            margin-bottom: 15px;
+        }
+        .field label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .field .value {
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        @media (max-width: 600px) {
+            .email-container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="email-container">
+    <h2>GIS - {{formName}}</h2>
+
+    <div class="field">
+        <label>Email:</label>
+        <div class="value">{{email}}</div>
+    </div>
+
+    <div class="field">
+        <label>Повідомлення:</label>
+        <div class="value">
+            {{text}}
+        </div>
+    </div>
+
+    <div class="field">
+        <label>Дата:</label>
+        <div class="value">{{date}}</div>
+    </div>
+</div>
+</body>
+</html>

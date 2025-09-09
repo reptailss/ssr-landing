@@ -1,0 +1,26 @@
+.root {
+    position: relative;
+    z-index: 5;
+    padding: 30px 0 40px
+}
+
+.list {
+    display: flex;
+    gap: 20px;
+}
+
+.card{
+    max-width: 600px;
+}
+
+@media(min-width: 992px) {
+    .list {
+        display: flex;
+        flex-direction: row;
+
+    }
+
+    .root {
+        padding: 30px 0 40px
+    }
+}

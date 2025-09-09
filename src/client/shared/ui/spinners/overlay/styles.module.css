@@ -1,0 +1,14 @@
+.root {
+    position: fixed;
+    content: "";
+    z-index: 99999999;
+    width: 100vw;
+    height: 100dvh;
+    left: 0;
+    right: 0;
+    top: 2px;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

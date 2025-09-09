@@ -1,0 +1,39 @@
+.root {
+    margin-top: 46px;
+    display: flex;
+    flex-direction: column;
+    gap:38px;
+}
+
+.description{
+    font-family: var(--font-family);
+    font-weight: 300;
+    font-size: 20px;
+    line-height: 160%;
+    color: #fff;
+    white-space: pre-line;
+}
+
+.video{
+    height: 202px;
+}
+
+
+@media (min-width: 992px) {
+    .root {
+        margin-top: 49px;
+        flex-direction: row-reverse;
+        gap: 58px;
+    }
+
+    .description{
+        font-size: 24px;
+        line-height: 150%;
+        width: 50%;
+    }
+
+    .video{
+        width: 50%;
+        height: 347px;
+    }
+}

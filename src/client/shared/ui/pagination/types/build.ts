@@ -1,0 +1,1 @@
+export type PaginationLinkHrefBuilderFn = (page: number) => string

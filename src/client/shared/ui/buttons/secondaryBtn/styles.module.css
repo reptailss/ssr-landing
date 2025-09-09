@@ -1,0 +1,20 @@
+.root {
+    font-family: var(--font-family);
+    font-weight: 500;
+    font-size: 20px;
+    text-align: center;
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 30px;
+    padding: 15px 20px;
+    transition: all .3s linear;
+}
+
+.root:hover {
+    background-color: #fff;
+    color: #010101;
+}
+
+.disabled{
+    color: #898989;
+}

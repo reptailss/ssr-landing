@@ -1,0 +1,66 @@
+.root {
+    padding: 64px 0 137px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 75px;
+}
+
+.wrapper {
+    display: flex;
+    gap: 34px;
+    flex-direction: column;
+    color: white;
+}
+
+.eTicketPortalMap {
+    height: 409px;
+    width: 100%;
+    border-radius: 24px;
+    object-fit: cover;
+}
+
+.inner {
+    display: flex;
+    flex-direction: column;
+    gap: 34px;
+}
+
+@media (min-width: 992px) {
+    .root {
+        padding: 66px 0 52px;
+        width: 100%;
+    }
+
+    .container {
+        gap: 21px;
+        flex-direction: row;
+        width: 100%;
+    }
+
+    .inner {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 34px;
+        justify-content: space-between;
+        flex-direction: row-reverse;
+    }
+
+    .wrapper {
+        gap: 54px;
+        width: 50%;
+    }
+
+
+    .eTicketPortalLink {
+        padding-top: 14px;
+    }
+
+    .eTicketPortalMap {
+        width: 50%;
+    }
+}
