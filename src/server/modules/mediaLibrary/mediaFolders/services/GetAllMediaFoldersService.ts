@@ -1,14 +1,15 @@
-import { PaginationQueryParams, PaginationValues } from 'os-core-ts'
-import { mediaFoldersModel, MediaFoldersModel } from '@modules/mediaLibrary/mediaFolders/model'
+import { Injectable, PaginationQueryParams, PaginationValues } from 'os-core-ts'
 import { MediaFolderDto } from '@common/dto/mediaFolderDto'
+import { MediaFoldersRepository } from '@modules/mediaLibrary/mediaFolders/repository'
 
+@Injectable()
 export class GetAllMediaFoldersService {
     constructor(
-        private readonly model: MediaFoldersModel = mediaFoldersModel,
+        private readonly repository: MediaFoldersRepository,
     ) {
     }
     
     public async getMediaFoldersPagination(params: PaginationQueryParams<MediaFolderDto>): Promise<PaginationValues<MediaFolderDto>> {
-        return this.model.pagination(params)
+        return this.repository.pagination(params)
     }
 }

@@ -2,16 +2,17 @@ import { CreateMultilanguageNewsDto } from '@common/dto/newsDto'
 import fs from 'fs/promises'
 import path from 'path'
 import { CreateNewsService } from '@modules/news/services/CreateNewsService'
-import { appLogger } from 'os-core-ts'
-import { DEFAULT_APP_LOCALE } from '@common/locales'
+import { appLogger, Injectable } from 'os-core-ts'
+import { DEFAULT_APP_LOCALE_VALUE } from '@common/locales'
 import { GetNewsService } from '@modules/news/services/GetNewsService'
 
 
+@Injectable()
 export class NewsMigrationService {
     
     constructor(
-        private readonly createNewsService: CreateNewsService = new CreateNewsService(),
-        private readonly getNewsService: GetNewsService = new GetNewsService(),
+        private readonly createNewsService: CreateNewsService,
+        private readonly getNewsService: GetNewsService,
     ) {
     }
     
@@ -22,14 +23,14 @@ export class NewsMigrationService {
             if (!news.length) {
                 return
             }
-            let count  = 0;
+            let count = 0
             const reverseNews = news.reverse()
             for (const newsDto of reverseNews) {
                 try {
-                    const defaultLocaleField = newsDto.multilanguage_field[DEFAULT_APP_LOCALE]
+                    const defaultLocaleField = newsDto.multilanguage_field[DEFAULT_APP_LOCALE_VALUE]
                     const oldDtoByUniqColumn = await this.getNewsService.getByTitleAndLocale(
                         defaultLocaleField.title,
-                        DEFAULT_APP_LOCALE,
+                        DEFAULT_APP_LOCALE_VALUE,
                     )
                     if (oldDtoByUniqColumn) {
                         continue
@@ -40,7 +41,7 @@ export class NewsMigrationService {
                     })
                     count++
                 } catch (error) {
-                    appLogger.error(error,JSON.stringify(newsDto.base_field.image))
+                    appLogger.error(error, JSON.stringify(newsDto.base_field.image))
                     break
                 }
             }

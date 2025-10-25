@@ -1,17 +1,17 @@
-import { ControllerDec, GetDec, SetHeaderDec, SwaggerInfoDec } from 'os-core-ts'
+import { Controller, Get, Header, SwaggerInfo } from 'os-core-ts'
 import { ClientSiteMapService } from '@modules/client/services/ClientSiteMapService'
 
-@ControllerDec()
+@Controller()
 export class ClientSiteMapController {
     
-    constructor(private readonly siteMapService: ClientSiteMapService = new ClientSiteMapService()) {
+    constructor(private readonly siteMapService: ClientSiteMapService) {
     }
     
-    @SwaggerInfoDec({
+    @SwaggerInfo({
         disable: true,
     })
-    @SetHeaderDec('content-type', 'application/xml')
-    @GetDec('/sitemap.xml')
+    @Header('content-type', 'application/xml')
+    @Get('/sitemap.xml')
     public generateSiteMap(): string {
         return this.siteMapService.generateSiteMap()
     }

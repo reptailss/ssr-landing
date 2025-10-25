@@ -2,12 +2,14 @@ import { CreateSharedContentDto, SharedContentDto } from '@common/dto/sharedCont
 import { CreateSharedContentService } from '@modules/sharedContents/services/CreateSharedContentService'
 import { UpdateSharedContentService } from '@modules/sharedContents/services/UpdateSharedContentService'
 import { GetSharedContentService } from '@modules/sharedContents/services/GetSharedContentService'
+import { Injectable } from 'os-core-ts'
 
+@Injectable()
 export class SaveSharedContentService {
     constructor(
-        private readonly getSharedContentService: GetSharedContentService = new GetSharedContentService(),
-        private readonly createSharedContentService: CreateSharedContentService = new CreateSharedContentService(),
-        private readonly updateSharedContentService: UpdateSharedContentService = new UpdateSharedContentService(),
+        private readonly getSharedContentService: GetSharedContentService,
+        private readonly createSharedContentService: CreateSharedContentService,
+        private readonly updateSharedContentService: UpdateSharedContentService,
     ) {
     }
     

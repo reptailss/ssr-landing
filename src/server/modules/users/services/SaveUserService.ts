@@ -1,13 +1,15 @@
-import { CreateUserDto, UserDto } from '@common/dto/userDto'
+import { AppUserDto, CreateAppUserDto } from '@common/dto/userDto'
 import { GetUserService } from '@modules/users/services/GetUserService'
 import { CreateUserService } from '@modules/users/services/CreateUserService'
 import { UpdateUserService } from '@modules/users/services/UpdateUserService'
+import { Injectable } from 'os-core-ts'
 
+@Injectable()
 export class SaveUserService {
     constructor(
-        private readonly getUserService: GetUserService = new GetUserService(),
-        private readonly createUserService: CreateUserService = new CreateUserService(),
-        private readonly updateUserService: UpdateUserService = new UpdateUserService(),
+        private readonly getUserService: GetUserService,
+        private readonly createUserService: CreateUserService,
+        private readonly updateUserService: UpdateUserService,
     ) {
     }
     
@@ -17,9 +19,9 @@ export class SaveUserService {
                               openUserId,
                           }: {
         initiatorOpenUserId: number
-        createDto: CreateUserDto
+        createDto: CreateAppUserDto
         openUserId: number
-    }): Promise<UserDto> {
+    }): Promise<AppUserDto> {
         
         const oldDto = await this.getUserService.getUserByOpenUserId(openUserId)
         

@@ -1,30 +1,30 @@
 import {
     AppError,
     BuildResponseFormat,
-    ControllerDec,
-    GetDec,
-    QueryParamDec,
-    QueryParamOptionalDec,
+    Controller,
+    Get,
+    QueryParam,
+    QueryParamOptional,
     RowResult,
-    SwaggerInfoDec,
+    SwaggerInfo,
 } from 'os-core-ts'
 import { GetSharedContentService } from '@modules/sharedContents/services/GetSharedContentService'
 import { SharedContentDto } from '@common/dto/sharedContentDto'
 import { SHARED_CONTENTS_ROUTE_PATHS } from '@common/apiRoutePaths/sharedContentRoutePaths'
-import { AppLocale } from '@common/locales'
+import { AppLocaleValue } from '@common/locales'
 
-@ControllerDec()
+@Controller()
 export class GetSharedContentController {
     constructor(
-        private readonly getSharedContentService: GetSharedContentService = new GetSharedContentService(),
+        private readonly getSharedContentService: GetSharedContentService,
     ) {
     }
     
-    @SwaggerInfoDec({ summary: 'Get shared-content by id' })
-    @GetDec(SHARED_CONTENTS_ROUTE_PATHS.getByKey)
+    @SwaggerInfo({ summary: 'Get shared-content by id' })
+    @Get(SHARED_CONTENTS_ROUTE_PATHS.getByKey)
     public async getSharedContentById(
-        @QueryParamDec('key') key: string,
-        @QueryParamOptionalDec('locale') locale: AppLocale | undefined,
+        @QueryParam('key') key: string,
+        @QueryParamOptional('locale') locale: AppLocaleValue | undefined,
     ): Promise<RowResult<SharedContentDto>> {
         const dto = await this.getSharedContentService.getSharedContentByKey({
             key,

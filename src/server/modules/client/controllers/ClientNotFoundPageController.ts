@@ -1,18 +1,18 @@
-import { ISsrNotFoundController, ReactSsrDec } from 'os-react-ssr-server'
-import { ControllerDec, LocaleDec, SetResponseStatus, SetResponseStatusDec } from 'os-core-ts'
-import { AppLocale } from '@common/locales'
+import { ISsrNotFoundController, ReactSsr } from 'os-react-ssr-server'
+import { AppLocale, Controller, StatusSetter } from 'os-core-ts'
+import { AppLocaleValue } from '@common/locales'
 import { BuildClientResponseFormat } from '@modules/client/clientResponseFormat/BuildClientResponseFormat'
 import { NotFoundClientPageData } from '@common/clientPageData/notFoundPageData'
 
-@ControllerDec()
+@Controller()
 export class ClientNotFoundPageController implements ISsrNotFoundController {
     
-    @ReactSsrDec('')
+    @ReactSsr('')
     public async notFoundPage(
-        @LocaleDec locale: AppLocale | null,
-        @SetResponseStatusDec setResponseStatus: SetResponseStatus,
+        @AppLocale() locale: AppLocaleValue | null,
+        @StatusSetter() statusSetter: (status: number) => void,
     ): Promise<NotFoundClientPageData> {
-        setResponseStatus(404)
+        statusSetter(404)
         return BuildClientResponseFormat.pageData({})
     }
 }

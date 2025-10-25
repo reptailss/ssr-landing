@@ -1,15 +1,16 @@
 import { CLIENT_ROUTE_PATHS, ClientRoutePaths } from '@common/clientRoutePaths'
-import { APP_LOCALES, AppLocale } from '@common/locales'
+import { APP_LOCALES, AppLocaleValue } from '@common/locales'
 import { PageDefaultContentJsonReader } from '@modules/pagesDefaultContent/services/PageDefaultContentJsonReader'
-import { AppError, appLogger } from 'os-core-ts'
+import { AppError, appLogger, Injectable } from 'os-core-ts'
 import { SavePageContentService } from '@modules/pageContents/services/SavePageContentService'
 import { PageContentDto } from '@common/dto/pageContentDto'
 
+@Injectable()
 export class SavePageDefaultContentService {
     
     constructor(
-        private readonly savePageContentService: SavePageContentService = new SavePageContentService(),
-        private readonly pageDefaultContentJsonReader: PageDefaultContentJsonReader = new PageDefaultContentJsonReader(),
+        private readonly savePageContentService: SavePageContentService,
+        private readonly pageDefaultContentJsonReader: PageDefaultContentJsonReader,
     ) {
     }
     
@@ -20,7 +21,7 @@ export class SavePageDefaultContentService {
                                                initiatorOpenUserId,
                                                key,
                                            }: {
-        locale: AppLocale
+        locale: AppLocaleValue
         page: string
         key: string
         initiatorOpenUserId: number
@@ -34,7 +35,7 @@ export class SavePageDefaultContentService {
         }
         const values = await this.pageDefaultContentJsonReader.readJson(
             routeKey as keyof ClientRoutePaths,
-            locale as AppLocale,
+            locale as AppLocaleValue,
         )
         if (!values || !(key in values)) {
             throw new AppError('Not found key in page', {
@@ -59,7 +60,7 @@ export class SavePageDefaultContentService {
                 try {
                     const values = await this.pageDefaultContentJsonReader.readJson(
                         routeKey as keyof ClientRoutePaths,
-                        locale as AppLocale,
+                        locale as AppLocaleValue,
                     )
                     if (!values) {
                         continue

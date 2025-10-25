@@ -1,8 +1,8 @@
-import { appLogger, ControllerDec, LocaleDec, ParamDec, QueryParamNumOptionalDec } from 'os-core-ts'
-import { ReactSsrDec } from 'os-react-ssr-server'
+import { appLogger, Controller, AppLocale, Param, QueryParamNumOptional } from 'os-core-ts'
+import { ReactSsr } from 'os-react-ssr-server'
 import { ClientPageDataService } from '@modules/client/services/ClientPageDataService'
 import { CLIENT_ROUTE_PATHS } from '@common/clientRoutePaths'
-import { AppLocale } from '@common/locales'
+import { AppLocaleValue } from '@common/locales'
 import { BuildClientResponseFormat } from '@modules/client/clientResponseFormat/BuildClientResponseFormat'
 import { GetAllNewsService } from '@modules/news/services/GetAllNewsService'
 import { NewsClientPageData, NewsPostClientPageData } from '@common/clientPageData/news'
@@ -12,19 +12,19 @@ import { GetNewsService } from '@modules/news/services/GetNewsService'
 const NEWS_PER_PAGE = 15
 const NEWS_POST_PER_PAGE = 9
 
-@ControllerDec()
+@Controller()
 export class ClientNewsPageController {
     constructor(
-        private readonly clientPageDataService: ClientPageDataService = new ClientPageDataService(),
-        private readonly getAllNewsService: GetAllNewsService = new GetAllNewsService(),
-        private readonly getNewsService: GetNewsService = new GetNewsService(),
+        private readonly clientPageDataService: ClientPageDataService,
+        private readonly getAllNewsService: GetAllNewsService,
+        private readonly getNewsService: GetNewsService,
     ) {
     }
     
-    @ReactSsrDec(CLIENT_ROUTE_PATHS.news)
+    @ReactSsr(CLIENT_ROUTE_PATHS.news)
     public async news(
-        @LocaleDec locale: AppLocale | null,
-        @QueryParamNumOptionalDec('page') page: number | undefined,
+        @AppLocale() locale: AppLocaleValue | null,
+        @QueryParamNumOptional('page') page: number | undefined,
     ): Promise<NewsClientPageData> {
         
         const pageData = await this.clientPageDataService.getPageData(
@@ -42,11 +42,11 @@ export class ClientNewsPageController {
         })
     }
     
-    @ReactSsrDec(CLIENT_ROUTE_PATHS.newsPost)
+    @ReactSsr(CLIENT_ROUTE_PATHS.newsPost)
     public async newsPost(
-        @LocaleDec locale: AppLocale | null,
-        @QueryParamNumOptionalDec('page') page: number | undefined,
-        @ParamDec('slug') slug: string,
+        @AppLocale() locale: AppLocaleValue | null,
+        @QueryParamNumOptional('page') page: number | undefined,
+        @Param('slug') slug: string,
     ): Promise<NewsPostClientPageData> {
         
         const news = await this.getNews(
@@ -66,7 +66,7 @@ export class ClientNewsPageController {
     private async getNews(
         page: number,
         perPage: number,
-        locale: AppLocale | null,
+        locale: AppLocaleValue | null,
     ): Promise<{
         page: number
         all_pages: number
@@ -96,7 +96,7 @@ export class ClientNewsPageController {
         }
     }
     
-    private async getTargetNews(slug: string, locale: AppLocale | null): Promise<NewsDto | null> {
+    private async getTargetNews(slug: string, locale: AppLocaleValue | null): Promise<NewsDto | null> {
         try {
             return await this.getNewsService.getBySlug(slug, locale)
         } catch (error) {

@@ -1,20 +1,20 @@
-import { ISsrGlobalDataController, ReactSsrDec } from 'os-react-ssr-server'
-import { ControllerDec, LocaleDec } from 'os-core-ts'
-import { AppLocale } from '@common/locales'
+import { ISsrGlobalDataController, ReactSsr } from 'os-react-ssr-server'
+import { Controller, AppLocale } from 'os-core-ts'
+import { AppLocaleValue } from '@common/locales'
 import { ClientGlobalDataService } from '@modules/client/services/ClientGlobalDataService'
 import { ClientGlobalData } from '@common/globalData'
 
-@ControllerDec()
+@Controller()
 export class ClientGlobalDataController implements ISsrGlobalDataController {
     
     constructor(
-        private readonly clientGlobalDataService: ClientGlobalDataService = new ClientGlobalDataService(),
+        private readonly clientGlobalDataService: ClientGlobalDataService,
     ) {
     }
     
-    @ReactSsrDec('')
+    @ReactSsr('')
     public async loadGlobalData(
-        @LocaleDec locale: AppLocale | null,
+        @AppLocale() locale: AppLocaleValue | null,
     ): Promise<ClientGlobalData> {
         return await this.clientGlobalDataService.getGlobalData(
             locale,

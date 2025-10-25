@@ -1,10 +1,12 @@
-import { ActionsLoggerService, AppError } from 'os-core-ts'
-import { userAccessModel, UserAccessModel } from '@modules/userAccess/model'
+import { ActionsLoggerService, AppError, Injectable } from 'os-core-ts'
+import { UserAccessRepository } from '@modules/userAccess/repository'
 
+@Injectable()
 export class DeleteUserAccessService {
+    
     constructor(
-        private readonly model: UserAccessModel = userAccessModel,
-        private readonly actionsLoggerService: ActionsLoggerService = new ActionsLoggerService(),
+        private readonly repository: UserAccessRepository,
+        private readonly actionsLoggerService: ActionsLoggerService,
     ) {
     }
     
@@ -16,10 +18,8 @@ export class DeleteUserAccessService {
         initiatorOpenUserId: number
         openUserId: number
     }) {
-        const oldDto = await this.model.findOne({
-            filters: {
-                open_user_id: openUserId,
-            },
+        const oldDto = await this.repository.findOne({
+            open_user_id: openUserId,
         })
         if (!oldDto) {
             throw new AppError('Not found', {
@@ -27,14 +27,14 @@ export class DeleteUserAccessService {
             })
         }
         
-        await this.model.destroy({
-            filters: { id: oldDto.id },
+        await this.repository.destroy({
+            id: oldDto.id,
         })
         
         await this.actionsLoggerService.logDeleteAction({
             oldValue: oldDto,
             openUserId: initiatorOpenUserId,
-            config: this.model.getConfig(),
+            config: this.repository.getConfig(),
             rowId: oldDto.id,
         })
         

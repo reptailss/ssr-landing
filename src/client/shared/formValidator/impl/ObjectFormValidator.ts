@@ -1,4 +1,4 @@
-import { AppLocale, DEFAULT_APP_LOCALE } from '@common/locales'
+import { AppLocaleValue, DEFAULT_APP_LOCALE_VALUE } from '@common/locales'
 import {
     IObjectFormValidator,
     ObjectFormValidatorResult,
@@ -9,7 +9,7 @@ import {
 import { FormValidateResult } from '@client-shared/formValidator/interfaces/result'
 
 
-const MESSAGES: Record<AppLocale, Record<string, string>> = {
+const MESSAGES: Record<AppLocaleValue, Record<string, string>> = {
     uk: {
         invalidType: 'Значення має бути обєктом.',
     },
@@ -41,8 +41,8 @@ export class ObjectFormValidator<
     }
     
     
-    public validate(value: unknown, locale?: AppLocale | null): FormValidateResult<ErrorResult, Value> {
-        const dict = MESSAGES[locale || DEFAULT_APP_LOCALE]
+    public validate(value: unknown, locale?: AppLocaleValue | null): FormValidateResult<ErrorResult, Value> {
+        const dict = MESSAGES[locale || DEFAULT_APP_LOCALE_VALUE]
         
         const shape: Shape = {} as Shape
         const data: Value = {} as Value

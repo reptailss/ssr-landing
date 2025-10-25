@@ -2,12 +2,14 @@ import { CreatePageContentDto, PageContentDto } from '@common/dto/pageContentDto
 import { CreatePageContentService } from '@modules/pageContents/services/CreatePageContentService'
 import { UpdatePageContentService } from '@modules/pageContents/services/UpdatePageContentService'
 import { GetPageContentService } from '@modules/pageContents/services/GetPageContentService'
+import { Injectable } from 'os-core-ts'
 
+@Injectable()
 export class SavePageContentService {
     constructor(
-        private readonly createPageContentService: CreatePageContentService = new CreatePageContentService(),
-        private readonly getPageContentService: GetPageContentService = new GetPageContentService(),
-        private readonly updatePageContentService: UpdatePageContentService = new UpdatePageContentService(),
+        private readonly createPageContentService: CreatePageContentService,
+        private readonly getPageContentService: GetPageContentService,
+        private readonly updatePageContentService: UpdatePageContentService,
     ) {
     }
     

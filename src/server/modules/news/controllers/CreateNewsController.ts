@@ -1,12 +1,12 @@
 import {
-    AuthDec,
-    BodyDec,
+    User,
+    Body,
     BuildResponseFormat,
-    ControllerDec,
+    Controller,
     MutateRowResult,
-    PostDec,
-    SwaggerInfoDec,
-    UserInfo,
+    Post,
+    SwaggerInfo,
+    UserDto,
 } from 'os-core-ts'
 import { NewsValidator } from '@modules/news/validator/NewsValidator'
 import { CreateNewsService } from '@modules/news/services/CreateNewsService'
@@ -18,25 +18,25 @@ const newsValidator = new NewsValidator()
 
 const createMultilanguageNewsDtoSchema = newsValidator.getCreateMultilanguageNewsDtoSchema()
 
-@ControllerDec()
+@Controller()
 export class CreateNewsController {
     constructor(
-        private readonly createNewsService: CreateNewsService = new CreateNewsService(),
-        private readonly checkUserAccessService: CheckUserAccessService = new CheckUserAccessService(),
+        private readonly createNewsService: CreateNewsService,
+        private readonly checkUserAccessService: CheckUserAccessService,
     ) {
     }
     
-    @SwaggerInfoDec({ summary: 'Add multilanguage news' })
-    @PostDec(NEWS_ROUTE_PATHS.addMultilanguage)
+    @SwaggerInfo({ summary: 'Add multilanguage news' })
+    @Post(NEWS_ROUTE_PATHS.addMultilanguage)
     public async createMultilanguageNews(
-        @BodyDec<CreateMultilanguageNewsDto>(createMultilanguageNewsDtoSchema) body: CreateMultilanguageNewsDto,
-        @AuthDec userInfo: UserInfo,
+        @Body<CreateMultilanguageNewsDto>(createMultilanguageNewsDtoSchema) body: CreateMultilanguageNewsDto,
+        @User() userDto: UserDto,
     ): Promise<MutateRowResult<string>> {
         
-        await this.checkUserAccessService.checkIsAdmins(userInfo.open_user_id)
+        await this.checkUserAccessService.checkIsAdmins(userDto.open_user_id)
         
         const ids = await this.createNewsService.createMultilanguageNews({
-            initiatorOpenUserId: userInfo.open_user_id,
+            initiatorOpenUserId: userDto.open_user_id,
             createMultilanguageDto: body,
         })
         return BuildResponseFormat.mutateRow(ids.join(','))

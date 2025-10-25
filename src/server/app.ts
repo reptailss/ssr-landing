@@ -1,11 +1,10 @@
 import { ReactSsrAppPlugin } from 'os-react-ssr-server'
-import { App, LocalesAppPlugin } from 'os-core-ts'
+import { App, DiContainer, LocalesAppPlugin } from 'os-core-ts'
 import { pageContentsAppModule } from '@modules/pageContents/pageContentsAppModule'
 import { dbConnectionStaticSql } from '@db/dbConnection'
 import { adminClientAppModule } from '@modules/adminClient/adminClientAppModule'
-import { APP_LOCALES, DEFAULT_APP_LOCALE } from '@common/locales'
+import { APP_LOCALES, DEFAULT_APP_LOCALE_VALUE } from '@common/locales'
 import { sharedContentsAppModule } from '@modules/sharedContents/sharedContentsAppModule'
-import { mediaLibraryAppModule } from '@modules/mediaLibrary/mediaLibraryAppModule'
 import { newsAppModule } from '@modules/news/newsAppModule'
 import { userAccessAppModule } from '@modules/userAccess/userAccessAppModule'
 import { usersAppModule } from '@modules/users/usersAppModule'
@@ -13,11 +12,17 @@ import { contactUsAppModule } from '@modules/contactUs/contactUsAppModule'
 import { ClientNotFoundPageController } from '@modules/client/controllers/ClientNotFoundPageController'
 import { ClientGlobalDataController } from '@modules/client/controllers/ClientGlobalDataController'
 import { clientAppModule } from '@modules/client/clientAppModule'
+import { mediaFilesAppModule } from '@modules/mediaLibrary/mediaFiles/mediaFilesAppModule'
+import { mediaFoldersAppModule } from '@modules/mediaLibrary/mediaFolders/mediaFoldersAppModule'
+import { InitUserAccessService } from '@modules/userAccess/services/InitUserAccessService'
+import { SavePageDefaultContentService } from '@modules/pageContents/services/SavePageDefaultContentService'
 
 
 export class AppService {
     
     private readonly app = new App()
+    private readonly initUserAccessService = DiContainer.resolve(InitUserAccessService)
+    private readonly savePageDefaultContentService = DiContainer.resolve(SavePageDefaultContentService)
     
     public async init(): Promise<void> {
         
@@ -30,7 +35,7 @@ export class AppService {
             .useDashboard()
             .usePlugin(new LocalesAppPlugin(
                 APP_LOCALES,
-                DEFAULT_APP_LOCALE,
+                DEFAULT_APP_LOCALE_VALUE,
             ))
             .usePlugin(
                 new ReactSsrAppPlugin()
@@ -42,15 +47,18 @@ export class AppService {
             .useModule(pageContentsAppModule)
             .useModule(sharedContentsAppModule)
             .useModule(newsAppModule)
-            .useModule(mediaLibraryAppModule)
+            .useModule(mediaFilesAppModule)
+            .useModule(mediaFoldersAppModule)
             .useModule(usersAppModule)
             .useModule(userAccessAppModule)
             .useModule(contactUsAppModule)
             .useModule(adminClientAppModule)
             .initModules()
         
-        await dbConnectionStaticSql.syncModels()
+        await dbConnectionStaticSql.syncRepositories()
         
+        await this.initUserAccessService.addSuperAdminAccessToUsers([1])
+        await this.savePageDefaultContentService.saveAllDefaultPagesContentIfNotExists()
         
         this.app.listen()
         

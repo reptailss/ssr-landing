@@ -1,11 +1,12 @@
-import { ActionsLoggerService } from 'os-core-ts'
-import { pageContentsModel, PageContentsModel } from '@modules/pageContents/model'
+import { ActionsLoggerService, Injectable } from 'os-core-ts'
 import { CreatePageContentDto, PageContentDto } from '@common/dto/pageContentDto'
+import { PageContentsRepository } from '@modules/pageContents/repository'
 
+@Injectable()
 export class CreatePageContentService {
     constructor(
-        private readonly model: PageContentsModel = pageContentsModel,
-        private readonly actionsLoggerService: ActionsLoggerService = new ActionsLoggerService(),
+        private readonly repository: PageContentsRepository,
+        private readonly actionsLoggerService: ActionsLoggerService,
     ) {
     }
     
@@ -16,11 +17,11 @@ export class CreatePageContentService {
         initiatorOpenUserId: number
         createDto: CreatePageContentDto
     }): Promise<PageContentDto> {
-        const newDto = await this.model.create(createDto)
+        const newDto = await this.repository.create(createDto)
         await this.actionsLoggerService.logCreateAction({
             value: newDto,
             openUserId: initiatorOpenUserId,
-            config: this.model.getConfig(),
+            config: this.repository.getConfig(),
             rowId: newDto.id,
         })
         

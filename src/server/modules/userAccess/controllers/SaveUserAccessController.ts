@@ -1,13 +1,4 @@
-import {
-    AuthDec,
-    BodyDec,
-    BuildResponseFormat,
-    ControllerDec,
-    MutateRowResult,
-    PostDec,
-    SwaggerInfoDec,
-    UserInfo,
-} from 'os-core-ts'
+import { Body, BuildResponseFormat, Controller, MutateRowResult, Post, SwaggerInfo, User, UserDto } from 'os-core-ts'
 import { UserAccessValidator } from '@modules/userAccess/validator/UserAccessValidator'
 import { CreateUserAccessDto } from '@common/dto/userAccessDto'
 import { USER_ACCESS_ROUTE_PATHS } from '@common/apiRoutePaths/userAccessRoutePaths'
@@ -18,25 +9,25 @@ const userAccessValidator = new UserAccessValidator()
 
 const createUserAccessBodySchema = userAccessValidator.getCreateUserAccessDtoSchema()
 
-@ControllerDec()
+@Controller()
 export class SaveUserAccessController {
     constructor(
-        private readonly saveUserAccessService: SaveUserAccessService = new SaveUserAccessService(),
-        private readonly checkUserAccessService: CheckUserAccessService = new CheckUserAccessService(),
+        private readonly saveUserAccessService: SaveUserAccessService,
+        private readonly checkUserAccessService: CheckUserAccessService,
     ) {
     }
     
-    @SwaggerInfoDec({ summary: 'Save user-access' })
-    @PostDec(USER_ACCESS_ROUTE_PATHS.save)
+    @SwaggerInfo({ summary: 'Save user-access' })
+    @Post(USER_ACCESS_ROUTE_PATHS.save)
     public async createUserAccess(
-        @BodyDec(createUserAccessBodySchema) body: CreateUserAccessDto,
-        @AuthDec userInfo: UserInfo,
+        @Body(createUserAccessBodySchema) body: CreateUserAccessDto,
+        @User() userDto: UserDto,
     ): Promise<MutateRowResult<number>> {
         
-        await this.checkUserAccessService.checkIsSuperAdmin(userInfo.open_user_id)
+        await this.checkUserAccessService.checkIsSuperAdmin(userDto.open_user_id)
         
         const newDto = await this.saveUserAccessService.saveUserAccess({
-            initiatorOpenUserId: userInfo.open_user_id,
+            initiatorOpenUserId: userDto.open_user_id,
             createDto: body,
         })
         return BuildResponseFormat.mutateRow(newDto.id)

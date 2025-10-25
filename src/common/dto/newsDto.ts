@@ -1,4 +1,4 @@
-import { AppLocale } from '@common/locales'
+import { AppLocaleValue } from '@common/locales'
 
 export type NewsDto = CreateNewsDto & {
     slug: string
@@ -11,7 +11,7 @@ export type NewsDto = CreateNewsDto & {
 export type MultilanguageNewsDto  = {
     base_field: BaseCreateFieldsNewsDto
     multilanguage_field:{
-        [key: AppLocale[number]]: MultilanguageCreateFieldsNewsDto
+        [key: AppLocaleValue[number]]: MultilanguageCreateFieldsNewsDto
     }
 }
 
@@ -20,7 +20,7 @@ export type UpdateNewsDto = Partial<CreateNewsDto>
 export type CreateNewsDto = {
     title: string
     content: string
-    locale: AppLocale
+    locale: AppLocaleValue
     image: string
 }
 
@@ -38,13 +38,13 @@ export type MultilanguageCreateFieldsNewsDto = {
 export type CreateMultilanguageNewsDto = {
     base_field: BaseCreateFieldsNewsDto
     multilanguage_field:{
-        [key: AppLocale[number]]: MultilanguageCreateFieldsNewsDto
+        [key: AppLocaleValue[number]]: MultilanguageCreateFieldsNewsDto
     }
 }
 
 export type UpdateMultilanguageNewsDto = {
     base_field: BaseCreateFieldsNewsDto
     multilanguage_field:{
-        [key: AppLocale[number]]: MultilanguageCreateFieldsNewsDto
+        [key: AppLocaleValue[number]]: MultilanguageCreateFieldsNewsDto
     }
 }

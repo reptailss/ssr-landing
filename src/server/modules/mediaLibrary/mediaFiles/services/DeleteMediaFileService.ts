@@ -1,11 +1,12 @@
-import { ActionsLoggerService, AppError, appLogger, FileService } from 'os-core-ts'
-import { MediaFilesModel, mediaFilesModel } from '@modules/mediaLibrary/mediaFiles/model'
+import { ActionsLoggerService, AppError, appLogger, FileService, Injectable } from 'os-core-ts'
 import { MediaFileDto } from '@modules/mediaLibrary/mediaFiles/dto'
+import { MediaFilesRepository } from '@modules/mediaLibrary/mediaFiles/repository'
 
+@Injectable()
 export class DeleteMediaFileService {
     constructor(
-        private readonly model: MediaFilesModel = mediaFilesModel,
-        private readonly actionsLoggerService: ActionsLoggerService = new ActionsLoggerService(),
+        private readonly repository: MediaFilesRepository,
+        private readonly actionsLoggerService: ActionsLoggerService,
     ) {
     }
     
@@ -16,16 +17,16 @@ export class DeleteMediaFileService {
         initiatorOpenUserId: number
         id: number
     }): Promise<MediaFileDto> {
-        const oldDto = await this.model.findOne({
-            filters: { id: id },
+        const oldDto = await this.repository.findOne({
+            id,
         })
         if (!oldDto) {
             throw new AppError('Not found', {
                 errorKey: 'NOT_FOUND_ERROR',
             })
         }
-        await this.model.destroy({
-            filters: { id: id },
+        await this.repository.destroy({
+            id,
         })
         
         if (oldDto.file) {
@@ -40,7 +41,7 @@ export class DeleteMediaFileService {
         await this.actionsLoggerService.logDeleteAction({
             oldValue: oldDto,
             openUserId: initiatorOpenUserId,
-            config: this.model.getConfig(),
+            config: this.repository.getConfig(),
             rowId: id,
         })
         
@@ -55,11 +56,8 @@ export class DeleteMediaFileService {
         folderId: number
     }): Promise<number> {
         
-        const mediaFilesDtoList = await this.model.findAll({
-            filters: {
-                folder_id: folderId,
-            },
-        })
+        const mediaFilesDtoList = await this.repository.findAll({ folder_id: folderId })
+        
         if (!mediaFilesDtoList.length) {
             return 0
         }
@@ -67,10 +65,8 @@ export class DeleteMediaFileService {
         
         for (const mediaFolderDto of mediaFilesDtoList) {
             try {
-                await this.model.destroy({
-                    filters: {
-                        id: mediaFolderDto.id,
-                    },
+                await this.repository.destroy({
+                    id: mediaFolderDto.id,
                 })
             } catch (error) {
                 appLogger.error('error delete media folder', error)
@@ -87,7 +83,7 @@ export class DeleteMediaFileService {
             await this.actionsLoggerService.logDeleteAction({
                 oldValue: mediaFolderDto,
                 openUserId: initiatorOpenUserId,
-                config: this.model.getConfig(),
+                config: this.repository.getConfig(),
                 rowId: mediaFolderDto.id,
             })
             res++

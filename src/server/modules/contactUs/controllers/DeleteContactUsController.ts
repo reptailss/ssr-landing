@@ -1,36 +1,36 @@
 import {
-    AuthDec,
     BuildResponseFormat,
-    ControllerDec,
-    DeleteDec,
+    Controller,
+    Delete,
     MutateRowResult,
-    ParamNumDec,
-    SwaggerInfoDec,
-    UserInfo,
+    Param,
+    SwaggerInfo,
+    User,
+    UserDto,
 } from 'os-core-ts'
 import { DeleteContactUsService } from '@modules/contactUs/services/DeleteContactUsService'
 import { CONTACT_US_ROUTE_PATHS } from '@common/apiRoutePaths/contactUsRoutePaths'
 import { CheckUserAccessService } from '@modules/userAccess/services/CheckUserAccessService'
 
-@ControllerDec()
+@Controller()
 export class DeleteContactUsController {
     constructor(
-        private readonly deleteContactUsService: DeleteContactUsService = new DeleteContactUsService(),
-        private readonly checkUserAccessService: CheckUserAccessService = new CheckUserAccessService(),
+        private readonly deleteContactUsService: DeleteContactUsService,
+        private readonly checkUserAccessService: CheckUserAccessService,
     ) {
     }
     
-    @SwaggerInfoDec({ summary: 'Delete contactus' })
-    @DeleteDec(CONTACT_US_ROUTE_PATHS.delete)
+    @SwaggerInfo({ summary: 'Delete contactus' })
+    @Delete(CONTACT_US_ROUTE_PATHS.delete)
     public async deleteContactUs(
-        @AuthDec userInfo: UserInfo,
-        @ParamNumDec('id') id: number,
+        @User() userDto: UserDto,
+        @Param('id') id: number,
     ): Promise<MutateRowResult<number>> {
         
-        await this.checkUserAccessService.checkIsAdmins(userInfo.open_user_id)
+        await this.checkUserAccessService.checkIsAdmins(userDto.open_user_id)
         
         const oldDto = await this.deleteContactUsService.deleteContactUsById({
-            initiatorOpenUserId: userInfo.open_user_id,
+            initiatorOpenUserId: userDto.open_user_id,
             id,
         })
         return BuildResponseFormat.mutateRow(oldDto.id)

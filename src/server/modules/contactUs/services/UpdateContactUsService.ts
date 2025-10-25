@@ -1,11 +1,12 @@
-import { ActionsLoggerService, AppError } from 'os-core-ts'
-import { contactUsModel, ContactUsModel } from '@modules/contactUs/model'
+import { ActionsLoggerService, AppError, Injectable } from 'os-core-ts'
 import { ContactUsDto, UpdateContactUsDto } from '@common/dto/contactUsDto'
+import { ContactUsRepository } from '@modules/contactUs/repository'
 
+@Injectable()
 export class UpdateContactUsService {
     constructor(
-        private readonly model: ContactUsModel = contactUsModel,
-        private readonly actionsLoggerService: ActionsLoggerService = new ActionsLoggerService(),
+        private readonly repository: ContactUsRepository,
+        private readonly actionsLoggerService: ActionsLoggerService,
     ) {
     }
     
@@ -18,22 +19,21 @@ export class UpdateContactUsService {
         updateDto: UpdateContactUsDto
         id: number
     }): Promise<ContactUsDto> {
-        const oldDto = await this.model.findByPk(id)
+        const oldDto = await this.repository.findByPk(id)
         if (!oldDto) {
             throw new AppError('Not found.', {
                 errorKey: 'NOT_FOUND_ERROR',
             })
         }
         
-        const newDto = await this.model.update(updateDto, {
-            filters: { id: id },
-            returning: true,
+        const newDto = await this.repository.update(updateDto, {
+            id: id,
         })
         await this.actionsLoggerService.logUpdateAction({
             oldValue: oldDto,
             newValue: newDto,
             openUserId: initiatorOpenUserId,
-            config: this.model.getConfig(),
+            config: this.repository.getConfig(),
             rowId: id,
         })
         

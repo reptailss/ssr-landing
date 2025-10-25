@@ -1,13 +1,13 @@
 import {
-    AuthDec,
-    BodyDec,
+    Body,
     BuildResponseFormat,
-    ControllerDec,
+    Controller,
     MutateRowResult,
-    ParamNumDec,
-    PutDec,
-    SwaggerInfoDec,
-    UserInfo,
+    Param,
+    Put,
+    SwaggerInfo,
+    User,
+    UserDto,
 } from 'os-core-ts'
 import { ContactUsValidator } from '@modules/contactUs/validator/ContactUsValidator'
 import { UpdateContactUsService } from '@modules/contactUs/services/UpdateContactUsService'
@@ -20,26 +20,26 @@ const contactUsValidator = new ContactUsValidator()
 
 const updateContactUsDtoSchema = contactUsValidator.getUpdateContactUsDtoSchema()
 
-@ControllerDec()
+@Controller()
 export class UpdateContactUsController {
     constructor(
-        private readonly updateContactUsService: UpdateContactUsService = new UpdateContactUsService(),
-        private readonly checkUserAccessService: CheckUserAccessService = new CheckUserAccessService(),
+        private readonly updateContactUsService: UpdateContactUsService,
+        private readonly checkUserAccessService: CheckUserAccessService,
     ) {
     }
     
-    @SwaggerInfoDec({ summary: 'Update contactus' })
-    @PutDec(CONTACT_US_ROUTE_PATHS.update)
+    @SwaggerInfo({ summary: 'Update contactus' })
+    @Put(CONTACT_US_ROUTE_PATHS.update)
     public async updateContactUs(
-        @AuthDec userInfo: UserInfo,
-        @ParamNumDec('id') id: number,
-        @BodyDec<UpdateContactUsDto>(updateContactUsDtoSchema) body: UpdateContactUsDto,
+        @User() userDto: UserDto,
+        @Param('id') id: number,
+        @Body<UpdateContactUsDto>(updateContactUsDtoSchema) body: UpdateContactUsDto,
     ): Promise<MutateRowResult<number>> {
         
-        await this.checkUserAccessService.checkIsAdmins(userInfo.open_user_id)
+        await this.checkUserAccessService.checkIsAdmins(userDto.open_user_id)
         
         const newDto = await this.updateContactUsService.updateContactUs({
-            initiatorOpenUserId: userInfo.open_user_id,
+            initiatorOpenUserId: userDto.open_user_id,
             updateDto: body,
             id,
         })

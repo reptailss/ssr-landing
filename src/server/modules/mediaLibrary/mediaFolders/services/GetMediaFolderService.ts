@@ -1,13 +1,15 @@
-import { mediaFoldersModel, MediaFoldersModel } from '@modules/mediaLibrary/mediaFolders/model'
 import { MediaFolderDto } from '@common/dto/mediaFolderDto'
+import { Injectable } from 'os-core-ts'
+import { MediaFoldersRepository } from '@modules/mediaLibrary/mediaFolders/repository'
 
+@Injectable()
 export class GetMediaFolderService {
     constructor(
-        private readonly model: MediaFoldersModel = mediaFoldersModel,
+        private readonly repository: MediaFoldersRepository,
     ) {
     }
     
     public async getMediaFolderById(id: number): Promise<MediaFolderDto | null> {
-        return this.model.findByPk(id)
+        return this.repository.findByPk(id)
     }
 }

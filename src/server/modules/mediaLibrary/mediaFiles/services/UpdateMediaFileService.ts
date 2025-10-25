@@ -1,19 +1,18 @@
-import { ActionsLoggerService, AppError, AppFile, appLogger, FileService } from 'os-core-ts'
-import { mediaFilesModel, MediaFilesModel } from '@modules/mediaLibrary/mediaFiles/model'
+import { ActionsLoggerService, AppError, appLogger, FileService, IAppFile, Injectable } from 'os-core-ts'
 import { MediaFileDto, UpdateMediaFileDto } from '@modules/mediaLibrary/mediaFiles/dto'
 import { MediaFilesChecker } from '@modules/mediaLibrary/mediaFiles/checker/MediaFilesChecker'
 import { UploadFilesService } from '@modules/mediaLibrary/mediaFiles/services/UploadFilesService'
-import { MediaFilesMapper } from '@modules/mediaLibrary/mediaFiles/mapper/MediaFilesMapper'
+import { MediaFilesRepository } from '@modules/mediaLibrary/mediaFiles/repository'
 
+@Injectable()
 export class UpdateMediaFileService {
     
-    private readonly mediaFilesMapper = new MediaFilesMapper()
     
     constructor(
-        private readonly model: MediaFilesModel = mediaFilesModel,
-        private readonly mediaFilesChecker: MediaFilesChecker = new MediaFilesChecker(),
-        private readonly uploadFilesService: UploadFilesService = new UploadFilesService(),
-        private readonly actionsLoggerService: ActionsLoggerService = new ActionsLoggerService(),
+        private readonly repository: MediaFilesRepository,
+        private readonly mediaFilesChecker: MediaFilesChecker,
+        private readonly uploadFilesService: UploadFilesService,
+        private readonly actionsLoggerService: ActionsLoggerService,
     ) {
     }
     
@@ -28,11 +27,11 @@ export class UpdateMediaFileService {
         initiatorOpenUserId: number
         updateDto: UpdateMediaFileDto
         id: number
-        file: AppFile | null
+        file: IAppFile | null
     }): Promise<MediaFileDto> {
         
         
-        const oldDto = await this.model.findByPk(id)
+        const oldDto = await this.repository.findByPk(id)
         
         if (!oldDto) {
             throw new AppError('Not found', {
@@ -92,13 +91,13 @@ export class UpdateMediaFileService {
         mimetype?: string
     }): Promise<MediaFileDto> {
         
-        const newDto = await this.model.update(this.mediaFilesMapper.updateMediaFileDtoToEntity({
+        const newDto = await this.repository.update({
             updateDto,
             file: filePath,
             mimetype,
-        }), {
-            filters: { id: oldDto.id },
-            returning: true,
+            where: {
+                id: oldDto.id,
+            },
         })
         
         if (filePath && oldDto.file) {
@@ -115,7 +114,7 @@ export class UpdateMediaFileService {
             oldValue: oldDto,
             newValue: newDto,
             openUserId: initiatorOpenUserId,
-            config: this.model.getConfig(),
+            config: this.repository.getConfig(),
             rowId: oldDto.id,
         })
         

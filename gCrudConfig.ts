@@ -1,57 +1,50 @@
-import { GmConfig, GmNoSqlModelConfig, GmSqlModelConfig } from 'os-core-ts'
+import {
+    GmCrudConfig,
+    GmCrudSqlRepositoryConfig,
+    GmCrudNoSqlRepositoryConfig,
+    GmCrudEndpointsConfig,
+} from 'os-core-ts'
 
-
-const sqlByDynamicDomain: GmSqlModelConfig = {
-    dbType: 'sql',
-    type: 'dynamicByDomain',
-    columns: { name: { type: 'STRING' }, age: { type: 'INTEGER' } },
-}
-
-const sqlByLeId: GmSqlModelConfig = {
-    dbType: 'sql',
-    type: 'dynamicDbConfigByLegalEntityId',
-    columns: {
-        locale: { type: 'STRING' },
-        value: { type: 'INTEGER' },
-        legal_entity_id: { type: 'INTEGER' },
-    },
-}
-
-const noSqlByYearAndMonth: GmNoSqlModelConfig = {
-    dbType: 'noSql',
-    type: 'byDatabaseNameAndYearMonth',
-    columns: { name: { type: 'STRING' }, price: { type: 'INTEGER' } },
-}
-
-const sqlByStaticDb: GmSqlModelConfig = {
+const sqlByStaticDb: GmCrudSqlRepositoryConfig = {
     dbType: 'sql',
     type: 'staticByDbConnection',
-    columns: {
-        email: { type: 'STRING' },
-        text: { type: 'STRING' },
-        form_name: { type: 'STRING' },
-        status: { type: 'STRING' },
-  
-    },
+    columns: {title: {type: 'STRING'}, description: {type: 'STRING'}},
 }
 
+const sqlByDynamicDomain: GmCrudSqlRepositoryConfig = {
+    dbType: 'sql',
+    type: 'dynamicByDomain',
+    columns: {name: {type: 'STRING'}, age: {type: 'INTEGER'}},
+}
 
-export default function buildGmConfig(): GmConfig {
+const sqlByLeId: GmCrudSqlRepositoryConfig = {
+    dbType: 'sql',
+    type: 'dynamicDbConfigByLegalEntityId',
+    columns: {title: {type: 'STRING'}, user_id: {type: 'INTEGER'}},
+}
+
+const noSqlByYearAndMonth: GmCrudNoSqlRepositoryConfig = {
+    dbType: 'noSql',
+    type: 'byDatabaseNameAndYearMonth',
+    columns: {name: {type: 'STRING'}, price: {type: 'INTEGER'}},
+}
+
+export default function buildGmCrudConfig(): GmCrudConfig {
     return {
         dtoName: {
-            singular: 'ContactUs',
-            plural: 'ContactUs',
+            singular: 'Test',
+            plural: 'Test',
         },
-        moduleName: 'ContactUs',
-        model: sqlByStaticDb,
+        moduleName: 'Test',
+        repository: sqlByStaticDb,
         hasSeparated: true,
         endpoints: {
-            add: { hasActionLogger: true, hasAuth: true, hasStructureAccess: false },
-            update: { hasActionLogger: true, hasAuth: true, hasStructureAccess: false },
-            delete: { hasActionLogger: true, hasAuth: true, hasStructureAccess: false },
-            get: { hasAuth: false, hasStructureAccess: false },
-            list: { hasAuth: false, hasStructureAccess: false },
+            add: {hasActionLogger: true, hasAuth: true, hasStructureAccess: false},
+            update: {hasActionLogger: true, hasAuth: true, hasStructureAccess: false},
+            delete: {hasActionLogger: true, hasAuth: true, hasStructureAccess: false},
+            get: {hasAuth: false, hasStructureAccess: false},
+            list: {hasAuth: false, hasStructureAccess: false},
         },
-        rootDir: 'src/server',
+        rootDir: 'src',
     }
 }

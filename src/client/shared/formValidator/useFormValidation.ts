@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useLocale } from 'os-react-ssr-client'
-import { AppLocale } from '@common/locales'
+import { AppLocaleValue } from '@common/locales'
 import { IFormSchemaValidator } from '@client-shared/formValidator/interfaces/formSchemaValidator'
 import { FormValidateResult } from '@client-shared/formValidator/interfaces/result'
 
@@ -22,7 +22,7 @@ export function useFormValidationByValue<Schema extends IFormSchemaValidator>(
     const validate = useCallback((): FormValidateResult<Schema['_errorResult'], Schema['_value']> => {
         const res = schema.validate(
             value,
-            locale as AppLocale,
+            locale as AppLocaleValue,
         )
         setErrorResult(res.errorResult)
         return res

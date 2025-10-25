@@ -3,7 +3,7 @@ import {USERS_ROUTE_PATHS} from '@common/apiRoutePaths/usersRoutePaths'
 import {AdminServerApiUrlBuilder} from '@admin-helpers/AdminServerApiUrlBuilder'
 
 
-const AUTH_API_URL = 'https://auth.sm.vin'
+const AUTH_API_URL = ''
 
 type LoginResponse = {
     need_2fa_auth: boolean
@@ -63,8 +63,8 @@ class EmailAuthField implements IAuth2FaField<LoginResponse> {
 
 export class AdminAuthProvider implements IAuth2FaProvider<LoginResponse> {
     private readonly AUTH_API_URL = AUTH_API_URL
-    private readonly CLIENT_ID = 'd89f0813-6107-41c9-9e49-47bcc25c8499'
-    private readonly CLIENT_SECRET = 'e7406dd0956850285598f1f603568accaac5b02338821055dda1a3f8c21cfeff'
+    private readonly CLIENT_ID = ''
+    private readonly CLIENT_SECRET = ''
     
     public async login({
                            username,
@@ -73,16 +73,26 @@ export class AdminAuthProvider implements IAuth2FaProvider<LoginResponse> {
         username: string,
         password: string,
     }): Promise<LoginResponse> {
-        return AdminRequest.get({
-            url: `${this.AUTH_API_URL}/v1/token`,
-            searchParams: {
-                grant_type: 'password',
-                client_id: this.CLIENT_ID,
-                client_secret: this.CLIENT_SECRET,
-                username: username,
-                password: password,
-            },
-        })
+       
+       return  {
+           need_2fa_auth: false,
+           need_code_from_email: false,
+           need_code_from_sms: false,
+           token_for_2fa_auth: '',
+           access_token: '',
+           expires_in: 1000000000,
+           refresh_token: '',
+       }
+        // return AdminRequest.get({
+        //     url: `${this.AUTH_API_URL}/v1/token`,
+        //     searchParams: {
+        //         grant_type: 'password',
+        //         client_id: this.CLIENT_ID,
+        //         client_secret: this.CLIENT_SECRET,
+        //         username: username,
+        //         password: password,
+        //     },
+        // })
     }
     
     public async checkNeed2FaByLoginResponse(response: LoginResponse): Promise<boolean> {
@@ -138,15 +148,21 @@ export class AdminAuthProvider implements IAuth2FaProvider<LoginResponse> {
         refresh_token: string
         expires_in: number
     }> {
-        return AdminRequest.get({
-            url: `${this.AUTH_API_URL}/v1/token`,
-            searchParams: {
-                grant_type: 'refresh_token',
-                client_id: this.CLIENT_ID,
-                client_secret: this.CLIENT_SECRET,
-                refresh_token: refreshToken,
-            },
-        })
+        return  {
+            access_token: '',
+            token_type: '',
+            refresh_token: '',
+            expires_in: 1000000000,
+        }
+        // return AdminRequest.get({
+        //     url: `${this.AUTH_API_URL}/v1/token`,
+        //     searchParams: {
+        //         grant_type: 'refresh_token',
+        //         client_id: this.CLIENT_ID,
+        //         client_secret: this.CLIENT_SECRET,
+        //         refresh_token: refreshToken,
+        //     },
+        // })
         
     }
     
@@ -154,17 +170,17 @@ export class AdminAuthProvider implements IAuth2FaProvider<LoginResponse> {
         userName: string
         picture: string | null
     }> {
-        const userInfo = await this.getAuthUserInfo(token)
+        const userDto = await this.getAuthUserDto(token)
         
         return {
-            userName: `${userInfo.family_name} ${userInfo.given_name}`,
-            picture: userInfo.picture || null,
+            userName: `${userDto.family_name} ${userDto.given_name}`,
+            picture: userDto.picture || null,
         }
     }
     
     
     public async onInitAuth(token: string): Promise<void> {
-        const userInfo = await this.getAuthUserInfo(token)
+        const userDto = await this.getAuthUserDto(token)
         
         await AdminAuthRequest.post({
             url: AdminServerApiUrlBuilder.build(USERS_ROUTE_PATHS.save),
@@ -173,9 +189,9 @@ export class AdminAuthProvider implements IAuth2FaProvider<LoginResponse> {
                 'content-type': 'application/json',
             },
             body: JSON.stringify({
-                family_name: userInfo.family_name,
-                given_name: userInfo.given_name,
-                email: userInfo.email,
+                family_name: userDto.family_name,
+                given_name: userDto.given_name,
+                email: userDto.email,
             }),
         })
     }
@@ -188,7 +204,7 @@ export class AdminAuthProvider implements IAuth2FaProvider<LoginResponse> {
             )
     }
     
-    private async getAuthUserInfo(token: string): Promise<{
+    private async getAuthUserDto(token: string): Promise<{
         email: string
         family_name: string
         given_name: string
@@ -197,11 +213,19 @@ export class AdminAuthProvider implements IAuth2FaProvider<LoginResponse> {
         id: number
     }> {
         
-        return AdminRequest.get({
-            url: `${this.AUTH_API_URL}/v1/userinfo`,
-            searchParams: {
-                access_token: token,
-            },
-        })
+        return  {
+            email: 'User',
+            family_name: 'User',
+            given_name: 'User',
+            middle_name: 'User',
+            picture: 'User',
+            id: 1
+        }
+        // return AdminRequest.get({
+        //     url: `${this.AUTH_API_URL}/v1/userinfo`,
+        //     searchParams: {
+        //         access_token: token,
+        //     },
+        // })
     }
 }

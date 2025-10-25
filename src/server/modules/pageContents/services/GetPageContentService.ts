@@ -1,9 +1,13 @@
-import { pageContentsModel, PageContentsModel } from '@modules/pageContents/model'
 import { PageContentDto } from '@common/dto/pageContentDto'
-import { AppLocale } from '@common/locales'
+import { AppLocaleValue } from '@common/locales'
+import { PageContentsRepository } from '@modules/pageContents/repository'
+import { Injectable } from 'os-core-ts'
 
+@Injectable()
 export class GetPageContentService {
-    constructor(private readonly model: PageContentsModel = pageContentsModel) {
+    constructor(
+        private readonly repository: PageContentsRepository,
+    ) {
     }
     
     
@@ -14,14 +18,12 @@ export class GetPageContentService {
                                             }: {
         page: string,
         key: string,
-        locale?: AppLocale
+        locale?: AppLocaleValue
     }): Promise<PageContentDto | null> {
-        return this.model.findOne({
-            filters: {
-                page,
-                key,
-                ...(locale ? { locale } : {}),
-            },
+        return this.repository.findOne({
+            page,
+            key,
+            ...(locale ? { locale } : {}),
         })
     }
 }

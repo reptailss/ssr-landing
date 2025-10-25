@@ -1,16 +1,14 @@
-import { ActionsLoggerService, AppError, SlugHelper } from 'os-core-ts'
-import { newsModel, NewsModel } from '@modules/news/model'
+import { ActionsLoggerService, AppError, Injectable, SlugHelper } from 'os-core-ts'
 import { CreateMultilanguageNewsDto } from '@common/dto/newsDto'
-import { NewsMapper } from '@modules/news/mapper/NewsMapper'
-import { AppLocale, DEFAULT_APP_LOCALE } from '@common/locales'
+import { AppLocaleValue, DEFAULT_APP_LOCALE_VALUE } from '@common/locales'
+import { NewsRepository } from '@modules/news/repository'
 
+@Injectable()
 export class CreateNewsService {
     
-    private readonly newsMapper = new NewsMapper()
-    
     constructor(
-        private readonly model: NewsModel = newsModel,
-        private readonly actionsLoggerService: ActionsLoggerService = new ActionsLoggerService(),
+        private readonly repository: NewsRepository,
+        private readonly actionsLoggerService: ActionsLoggerService,
     ) {
     }
     
@@ -22,7 +20,7 @@ export class CreateNewsService {
         createMultilanguageDto: CreateMultilanguageNewsDto
     }): Promise<number[]> {
         const ids: number[] = []
-        const defaultLocaleField = createMultilanguageDto.multilanguage_field[DEFAULT_APP_LOCALE]
+        const defaultLocaleField = createMultilanguageDto.multilanguage_field[DEFAULT_APP_LOCALE_VALUE]
         
         if (!defaultLocaleField) {
             throw new AppError('Not found default local multilanguage fields', {
@@ -30,11 +28,9 @@ export class CreateNewsService {
             })
         }
         
-        const oldDtoByUniqColumn = await this.model.findOne({
-            filters: {
-                title: defaultLocaleField.title,
-                locale: DEFAULT_APP_LOCALE,
-            },
+        const oldDtoByUniqColumn = await this.repository.findOne({
+            title: defaultLocaleField.title,
+            locale: DEFAULT_APP_LOCALE_VALUE,
         })
         
         if (oldDtoByUniqColumn) {
@@ -47,20 +43,20 @@ export class CreateNewsService {
         for (const locale in createMultilanguageDto.multilanguage_field) {
             const multilanguageField = createMultilanguageDto.multilanguage_field[locale]
             
-            const newDto = await this.model.create(this.newsMapper.createNewsDtoToEntity({
+            const newDto = await this.repository.create({
                 createDto: {
                     image: createMultilanguageDto.base_field.image,
-                    locale: locale as AppLocale,
+                    locale: locale as AppLocaleValue,
                     title: multilanguageField.title,
                     content: multilanguageField.content,
                 },
                 dateAdd: createMultilanguageDto.base_field.date_add,
                 slug,
-            }))
+            })
             await this.actionsLoggerService.logCreateAction({
                 value: newDto,
                 openUserId: initiatorOpenUserId,
-                config: this.model.getConfig(),
+                config: this.repository.getConfig(),
                 rowId: newDto.id,
             })
             ids.push(newDto.id)

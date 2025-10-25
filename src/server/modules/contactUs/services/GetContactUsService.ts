@@ -1,10 +1,15 @@
-import {contactUsModel, ContactUsModel} from '@modules/contactUs/model'
-import {ContactUsDto} from '@common/dto/contactUsDto'
+import { ContactUsDto } from '@common/dto/contactUsDto'
+import { Injectable } from 'os-core-ts'
+import { ContactUsRepository } from '@modules/contactUs/repository'
 
+@Injectable()
 export class GetContactUsService {
-    constructor(private readonly model: ContactUsModel = contactUsModel) {}
-
+    constructor(
+        private readonly repository: ContactUsRepository,
+    ) {
+    }
+    
     public async getContactUsById(id: number): Promise<ContactUsDto | null> {
-        return this.model.findByPk(id)
+        return this.repository.findByPk(id)
     }
 }

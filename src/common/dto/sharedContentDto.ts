@@ -1,4 +1,4 @@
-import { AppLocale } from '@common/locales'
+import { AppLocaleValue } from '@common/locales'
 
 export type SharedContentDto = CreateSharedContentDto & {
     id: number
@@ -12,5 +12,5 @@ export type UpdateSharedContentDto = Partial<CreateSharedContentDto>
 export type CreateSharedContentDto = {
     key: string
     value: object
-    locale: AppLocale
+    locale: AppLocaleValue
 }

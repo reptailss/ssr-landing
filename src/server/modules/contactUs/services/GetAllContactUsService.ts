@@ -1,13 +1,17 @@
-import {PaginationQueryParams, PaginationValues} from 'os-core-ts'
-import {contactUsModel, ContactUsModel} from '@modules/contactUs/model'
-import {ContactUsDto} from '@common/dto/contactUsDto'
+import { Injectable, PaginationQueryParams, PaginationValues } from 'os-core-ts'
+import { ContactUsDto } from '@common/dto/contactUsDto'
+import { ContactUsRepository } from '@modules/contactUs/repository'
 
+@Injectable()
 export class GetAllContactUsService {
-    constructor(private readonly model: ContactUsModel = contactUsModel) {}
-
+    constructor(
+        private readonly repository: ContactUsRepository,
+    ) {
+    }
+    
     public async getContactUsPagination(
         params: PaginationQueryParams<ContactUsDto>,
     ): Promise<PaginationValues<ContactUsDto>> {
-        return this.model.pagination(params)
+        return this.repository.pagination(params)
     }
 }

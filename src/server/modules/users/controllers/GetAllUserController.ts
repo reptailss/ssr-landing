@@ -1,33 +1,33 @@
 import {
     BuildResponseFormat,
-    ControllerDec,
-    GetDec,
+    Controller,
+    Get,
     PaginationQueryParams,
-    PaginationQueryParamsDec,
+    PaginationParams,
     PaginationResult,
-    SwaggerInfoDec,
+    SwaggerInfo,
 } from 'os-core-ts'
 import { UsersValidator } from '@modules/users/validator/UsersValidator'
 import { GetAllUsersService } from '@modules/users/services/GetAllUsersService'
-import { UserDto } from '@common/dto/userDto'
+import { AppUserDto } from '@common/dto/userDto'
 import { USERS_ROUTE_PATHS } from '@common/apiRoutePaths/usersRoutePaths'
 
 const usersValidator = new UsersValidator()
-const userDtoPaginationQueryParamsSchema = usersValidator.getUserDtoPaginationQueryParamsSchema()
+const userDtoPaginationQueryParamsSchema = usersValidator.getAppUserDtoPaginationQueryParamsSchema()
 
-@ControllerDec()
+@Controller()
 export class GetAllUserController {
     constructor(
-        private readonly getAllUserService: GetAllUsersService = new GetAllUsersService(),
+        private readonly getAllUserService: GetAllUsersService,
     ) {
     }
     
-    @SwaggerInfoDec({ summary: 'Get users list' })
-    @GetDec(USERS_ROUTE_PATHS.list)
+    @SwaggerInfo({ summary: 'Get users list' })
+    @Get(USERS_ROUTE_PATHS.list)
     public async getUsersPagination(
-        @PaginationQueryParamsDec(userDtoPaginationQueryParamsSchema)
-        params: PaginationQueryParams<UserDto>,
-    ): Promise<PaginationResult<UserDto>> {
+        @PaginationParams(userDtoPaginationQueryParamsSchema)
+        params: PaginationQueryParams<AppUserDto>,
+    ): Promise<PaginationResult<AppUserDto>> {
         const paginationValues = await this.getAllUserService.getUsersPagination(params)
         return BuildResponseFormat.pagination(paginationValues)
     }

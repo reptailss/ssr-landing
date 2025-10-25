@@ -1,14 +1,12 @@
-import { ActionsLoggerService } from 'os-core-ts'
-import { usersModel, UsersModel } from '@modules/users/model'
-import { CreateUserDto, UserDto } from '@common/dto/userDto'
-import { UsersMapper } from '@modules/users/mapper/UsersMapper'
+import { AppUserDto, CreateAppUserDto } from '@common/dto/userDto'
+import { Injectable } from 'os-core-ts'
+import { UserEntityRepository } from '@modules/users/repository'
 
+@Injectable()
 export class CreateUserService {
     
-    private readonly usersMapper = new UsersMapper()
-    
     constructor(
-        private readonly model: UsersModel = usersModel,
+        private readonly repository: UserEntityRepository,
     ) {
     }
     
@@ -18,12 +16,12 @@ export class CreateUserService {
                                 openUserId,
                             }: {
         initiatorOpenUserId: number
-        createDto: CreateUserDto
+        createDto: CreateAppUserDto
         openUserId: number
-    }): Promise<UserDto> {
-        return await this.model.create(this.usersMapper.createUserDtoToEntity({
+    }): Promise<AppUserDto> {
+        return await this.repository.create(
             createDto,
             openUserId,
-        }))
+        )
     }
 }

@@ -1,4 +1,4 @@
-import { AppLocales } from '@common/locales'
+import { AppLocaleValues } from '@common/locales'
 import { SharedContent } from '@common/sharedContent'
 
-export type SharedContentDefaultValues = Record<AppLocales[number], SharedContent>
+export type SharedContentDefaultValues = Record<AppLocaleValues[number], SharedContent>

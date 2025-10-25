@@ -1,19 +1,20 @@
 import { SharedContent } from '@common/sharedContent'
-import { AppLocale } from '@common/locales'
-import { appLogger } from 'os-core-ts'
-import { GetAllSharedContentsService } from '@modules/sharedContents/services/getAllSharedContentsService'
+import { AppLocaleValue } from '@common/locales'
+import { appLogger, Injectable } from 'os-core-ts'
+import { GetAllSharedContentsService } from '@modules/sharedContents/services/GetAllSharedContentsService'
 import { ClientGlobalData } from '@common/globalData'
 import { APP_SERVER_CONFIG } from '@config'
 
 
+@Injectable()
 export class ClientGlobalDataService {
     
     constructor(
-        private readonly getAllSharedContentsService: GetAllSharedContentsService = new GetAllSharedContentsService(),
+        private readonly getAllSharedContentsService: GetAllSharedContentsService,
     ) {
     }
     
-    public async getGlobalData(locale: AppLocale | null): Promise<ClientGlobalData> {
+    public async getGlobalData(locale: AppLocaleValue | null): Promise<ClientGlobalData> {
         const sharedContent = await this.loadSharedContent(locale)
         return {
             sharedContent,
@@ -22,7 +23,7 @@ export class ClientGlobalDataService {
     }
     
     private async loadSharedContent(
-        locale: AppLocale | null,
+        locale: AppLocaleValue | null,
     ): Promise<Partial<SharedContent>> {
         try {
             const sharedContentList = await this.getAllSharedContentsService.getSimpleSharedContents(

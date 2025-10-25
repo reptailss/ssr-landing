@@ -1,14 +1,17 @@
-import { PaginationQueryParams, PaginationValues } from 'os-core-ts'
-import { usersModel, UsersModel } from '@modules/users/model'
-import { UserDto } from '@common/dto/userDto'
+import { Injectable, PaginationQueryParams, PaginationValues } from 'os-core-ts'
+import { AppUserDto } from '@common/dto/userDto'
+import { UserEntityRepository } from '@modules/users/repository'
 
+@Injectable()
 export class GetAllUsersService {
-    constructor(private readonly model: UsersModel = usersModel) {
+    constructor(
+        private readonly repository: UserEntityRepository,
+    ) {
     }
     
     public async getUsersPagination(
-        params: PaginationQueryParams<UserDto>,
-    ): Promise<PaginationValues<UserDto>> {
-        return this.model.pagination(params)
+        params: PaginationQueryParams<AppUserDto>,
+    ): Promise<PaginationValues<AppUserDto>> {
+        return this.repository.pagination(params)
     }
 }

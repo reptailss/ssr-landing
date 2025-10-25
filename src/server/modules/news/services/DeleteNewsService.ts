@@ -1,10 +1,11 @@
-import { ActionsLoggerService } from 'os-core-ts'
-import { newsModel, NewsModel } from '@modules/news/model'
+import { ActionsLoggerService, Injectable } from 'os-core-ts'
+import { NewsRepository } from '@modules/news/repository'
 
+@Injectable()
 export class DeleteNewsService {
     constructor(
-        private readonly model: NewsModel = newsModel,
-        private readonly actionsLoggerService: ActionsLoggerService = new ActionsLoggerService(),
+        private readonly repository: NewsRepository,
+        private readonly actionsLoggerService: ActionsLoggerService,
     ) {
     }
     
@@ -15,8 +16,10 @@ export class DeleteNewsService {
         initiatorOpenUserId: number
         slug: string
     }): Promise<number[]> {
-        const oldDtoList = await this.model.findAll({
-            filters: { slug },
+        const oldDtoList = await this.repository.findAll({
+            where: {
+                slug,
+            },
         })
         if (!oldDtoList?.length) {
             return []
@@ -24,14 +27,14 @@ export class DeleteNewsService {
         const ids: number[] = []
         
         for (const oldDto of oldDtoList) {
-            await this.model.destroy({
-                filters: { id: oldDto.id },
+            await this.repository.destroy({
+                id: oldDto.id,
             })
             
             await this.actionsLoggerService.logDeleteAction({
                 oldValue: oldDto,
                 openUserId: initiatorOpenUserId,
-                config: this.model.getConfig(),
+                config: this.repository.getConfig(),
                 rowId: oldDto.id,
             })
             ids.push(oldDto.id)

@@ -1,26 +1,22 @@
-import { AppLocale } from '@common/locales'
-import { PageContentsModel, pageContentsModel } from '@modules/pageContents/model'
+import { AppLocaleValue } from '@common/locales'
+import { PageContentsRepository } from '@modules/pageContents/repository'
+import { Injectable } from 'os-core-ts'
 
+@Injectable()
 export class GetAllPageContentsService {
     
     constructor(
-        private readonly model: PageContentsModel = pageContentsModel,
+        private readonly repository: PageContentsRepository,
     ) {
     }
     
-    public async getSimpleContentsByPage(page: string, locale?: AppLocale | null): Promise<{
+    public async getSimpleContentsByPage(page: string, locale?: AppLocaleValue | null): Promise<{
         key: string
         value: object
     }[]> {
-        return this.model.findAll({
-            filters: {
-                page,
-                ...(locale ? { locale } : {}),
-            },
-            attributes: [
-                'key',
-                'value',
-            ],
+        return this.repository.findAllSimple({
+            page,
+            ...(locale ? { locale } : {}),
         })
     }
 }

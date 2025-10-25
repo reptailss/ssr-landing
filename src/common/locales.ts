@@ -1,6 +1,6 @@
 export const APP_LOCALES = ['uk', 'en'] as const
 
-export type AppLocales = typeof APP_LOCALES
-export type AppLocale = AppLocales[number]
+export type AppLocaleValues = typeof APP_LOCALES
+export type AppLocaleValue = AppLocaleValues[number]
 
-export const DEFAULT_APP_LOCALE: AppLocale = 'uk'
+export const DEFAULT_APP_LOCALE_VALUE: AppLocaleValue = 'uk'

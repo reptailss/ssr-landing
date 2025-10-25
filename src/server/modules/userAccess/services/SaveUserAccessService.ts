@@ -3,14 +3,16 @@ import { GetUserAccessService } from '@modules/userAccess/services/GetUserAccess
 import { CreateUserAccessService } from '@modules/userAccess/services/CreateUserAccessService'
 import { UpdateUserAccessService } from '@modules/userAccess/services/UpdateUserAccessService'
 import { UserAccessChecker } from '@modules/userAccess/checker/UserAccessChecker'
+import { Injectable } from 'os-core-ts'
 
+@Injectable()
 export class SaveUserAccessService {
     
     constructor(
-        private readonly getUserAccessService: GetUserAccessService = new GetUserAccessService(),
-        private readonly createUserAccessService: CreateUserAccessService = new CreateUserAccessService(),
-        private readonly updateUserAccessService: UpdateUserAccessService = new UpdateUserAccessService(),
-        private readonly userAccessChecker: UserAccessChecker = new UserAccessChecker(),
+        private readonly getUserAccessService: GetUserAccessService,
+        private readonly createUserAccessService: CreateUserAccessService,
+        private readonly updateUserAccessService: UpdateUserAccessService,
+        private readonly userAccessChecker: UserAccessChecker,
     ) {
     }
     

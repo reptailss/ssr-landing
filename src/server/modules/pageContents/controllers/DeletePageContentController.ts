@@ -1,41 +1,41 @@
 import {
-    AuthDec,
     BuildResponseFormat,
-    ControllerDec,
-    DeleteDec,
+    Controller,
+    Delete,
     MutateRowResult,
-    QueryParamDec,
-    QueryParamOptionalDec,
-    SwaggerInfoDec,
-    UserInfo,
+    QueryParam,
+    QueryParamOptional,
+    SwaggerInfo,
+    User,
+    UserDto,
 } from 'os-core-ts'
 import { DeletePageContentService } from '@modules/pageContents/services/DeletePageContentService'
 import { PAGE_CONTENTS_ROUTE_PATHS } from '@common/apiRoutePaths/pageContentsRoutePaths'
-import { AppLocale } from '@common/locales'
+import { AppLocaleValue } from '@common/locales'
 import { CheckUserAccessService } from '@modules/userAccess/services/CheckUserAccessService'
 
-@ControllerDec()
+@Controller()
 export class DeletePageContentController {
     constructor(
-        private readonly deletePageContentService: DeletePageContentService = new DeletePageContentService(),
-        private readonly checkUserAccessService: CheckUserAccessService = new CheckUserAccessService(),
+        private readonly deletePageContentService: DeletePageContentService ,
+        private readonly checkUserAccessService: CheckUserAccessService,
     ) {
     }
     
-    @SwaggerInfoDec({ summary: 'Delete page-content by page and key' })
-    @DeleteDec(PAGE_CONTENTS_ROUTE_PATHS.deleteByPageAndKey)
+    @SwaggerInfo({ summary: 'Delete page-content by page and key' })
+    @Delete(PAGE_CONTENTS_ROUTE_PATHS.deleteByPageAndKey)
     public async deletePageContentByPageAndKey(
-        @AuthDec userInfo: UserInfo,
-        @QueryParamDec('page') page: string,
-        @QueryParamDec('key') key: string,
-        @QueryParamOptionalDec('locale') locale: AppLocale | undefined,
+        @User() userDto: UserDto,
+        @QueryParam('page') page: string,
+        @QueryParam('key') key: string,
+        @QueryParamOptional('locale') locale: AppLocaleValue | undefined,
     ): Promise<MutateRowResult<number>> {
         
-        await this.checkUserAccessService.checkIsAdmins(userInfo.open_user_id)
+        await this.checkUserAccessService.checkIsAdmins(userDto.open_user_id)
         
         
         const oldDto = await this.deletePageContentService.deletePageContentByPageAndKey({
-            initiatorOpenUserId: userInfo.open_user_id,
+            initiatorOpenUserId: userDto.open_user_id,
             page,
             key,
             locale,

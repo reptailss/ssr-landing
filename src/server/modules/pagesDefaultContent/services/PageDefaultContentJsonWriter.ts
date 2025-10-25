@@ -2,7 +2,8 @@ import content from '../content'
 import fs from 'fs/promises'
 import path from 'path'
 import { ClientRoutePaths } from '@common/clientRoutePaths'
-import { AppLocale } from '@common/locales'
+import { AppLocaleValue } from '@common/locales'
+
 
 export class PageDefaultContentJsonWriter {
     private readonly dirPath = path.resolve(process.cwd(), 'static', 'pagesDefaultContentJson')
@@ -16,8 +17,8 @@ export class PageDefaultContentJsonWriter {
             for (const locale in localsContent) {
                 try {
                     await fs.writeFile(
-                        this.buildFilePath(key as keyof ClientRoutePaths, locale as AppLocale),
-                        JSON.stringify(localsContent[locale as AppLocale]),
+                        this.buildFilePath(key as keyof ClientRoutePaths, locale as AppLocaleValue),
+                        JSON.stringify(localsContent[locale as AppLocaleValue]),
                         'utf8',
                     )
                 } catch (error) {
@@ -30,7 +31,7 @@ export class PageDefaultContentJsonWriter {
         console.log(`Total write count: ${count}`)
     }
     
-    private buildFilePath(contentKey: keyof ClientRoutePaths, locale: AppLocale): string {
+    private buildFilePath(contentKey: keyof ClientRoutePaths, locale: AppLocaleValue): string {
         return path.resolve(this.dirPath, `${contentKey}-${locale}.json`)
     }
 }

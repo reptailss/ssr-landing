@@ -1,25 +1,25 @@
-import { appLogger, ControllerDec, LocaleDec } from 'os-core-ts'
-import { ReactSsrDec } from 'os-react-ssr-server'
+import { appLogger, Controller, AppLocale, Param } from 'os-core-ts'
+import { ReactSsr } from 'os-react-ssr-server'
 import { ClientPageDataService } from '@modules/client/services/ClientPageDataService'
 import { CLIENT_ROUTE_PATHS } from '@common/clientRoutePaths'
-import { AppLocale } from '@common/locales'
+import { AppLocaleValue } from '@common/locales'
 import { GetAllNewsService } from '@modules/news/services/GetAllNewsService'
 import { HomeClientPageData } from '@common/clientPageData/home'
 import { BuildClientResponseFormat } from '@modules/client/clientResponseFormat/BuildClientResponseFormat'
 import { NewsDto } from '@common/dto/newsDto'
 
 
-@ControllerDec()
+@Controller()
 export class ClientHomePageController {
     constructor(
-        private readonly clientPageDataService: ClientPageDataService = new ClientPageDataService(),
-        private readonly getAllNewsService: GetAllNewsService = new GetAllNewsService(),
+        private readonly clientPageDataService: ClientPageDataService,
+        private readonly getAllNewsService: GetAllNewsService,
     ) {
     }
     
-    @ReactSsrDec(CLIENT_ROUTE_PATHS.home)
+    @ReactSsr(CLIENT_ROUTE_PATHS.home)
     public async home(
-        @LocaleDec locale: AppLocale | null,
+        @AppLocale() locale: AppLocaleValue | null,
     ): Promise<HomeClientPageData> {
         const pageContent = await this.clientPageDataService.getPageData(
             CLIENT_ROUTE_PATHS.home,
@@ -31,8 +31,7 @@ export class ClientHomePageController {
             lastNewsList,
         })
     }
-    
-    private async getLastNewsList(locale: AppLocale | null): Promise<NewsDto[]> {
+    private async getLastNewsList(locale: AppLocaleValue | null): Promise<NewsDto[]> {
         try {
             return await this.getAllNewsService.getLastNewsList(3, locale)
         } catch (error) {

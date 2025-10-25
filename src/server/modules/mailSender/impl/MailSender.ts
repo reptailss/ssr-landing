@@ -1,6 +1,6 @@
 import nodemailer from 'nodemailer'
 import { APP_SERVER_CONFIG } from '@config'
-import { AppError, appLogger } from 'os-core-ts'
+import { AppError, appLogger, Injectable } from 'os-core-ts'
 import { IMailSender } from '@modules/mailSender/interfaces'
 
 const transporter = nodemailer.createTransport({
@@ -11,6 +11,7 @@ const transporter = nodemailer.createTransport({
     },
 })
 
+@Injectable()
 export class MailSender implements IMailSender {
     
     public async send({

@@ -1,5 +1,5 @@
 import { App, ClientAppCreator } from 'admin-panel-builder'
-import { APP_LOCALES, DEFAULT_APP_LOCALE } from '@common/locales'
+import { APP_LOCALES, DEFAULT_APP_LOCALE_VALUE } from '@common/locales'
 import { AdminAuthProvider } from '@admin-providers/AdminAuthProvider'
 import { AdminAccessProvider } from '@admin-providers/AdminAccessProvider'
 import { adminAccessManager } from '@admin-managers/adminAccessManager'
@@ -11,7 +11,7 @@ import { adminSharedContentManager } from '@admin-managers/adminSharedContentMan
 
 const app = new App()
     .setLocales(APP_LOCALES)
-    .setDefaultLocale(DEFAULT_APP_LOCALE)
+    .setDefaultLocale(DEFAULT_APP_LOCALE_VALUE)
     .setAuthProvider(new AdminAuthProvider())
     .setAccessProvider(new AdminAccessProvider())
     .addAccessManager(adminAccessManager)

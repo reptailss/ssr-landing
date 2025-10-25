@@ -1,15 +1,13 @@
-import { ActionsLoggerService } from 'os-core-ts'
-import { userAccessModel, UserAccessModel } from '@modules/userAccess/model'
+import { ActionsLoggerService, Injectable } from 'os-core-ts'
 import { CreateUserAccessDto, UserAccessDto } from '@common/dto/userAccessDto'
-import { UserAccessMapper } from '@modules/userAccess/mapper/UserAccessMapper'
+import { UserAccessRepository } from '@modules/userAccess/repository'
 
+@Injectable()
 export class CreateUserAccessService {
     
-    private readonly userAccessMapper = new UserAccessMapper()
-    
     constructor(
-        private readonly model: UserAccessModel = userAccessModel,
-        private readonly actionsLoggerService: ActionsLoggerService = new ActionsLoggerService(),
+        private readonly repository: UserAccessRepository,
+        private readonly actionsLoggerService: ActionsLoggerService,
     ) {
     }
     
@@ -22,15 +20,15 @@ export class CreateUserAccessService {
     }): Promise<UserAccessDto> {
         
         
-        const newDto = await this.model.create(this.userAccessMapper.createUserAccessDtoToEntity({
+        const newDto = await this.repository.create(
             createDto,
-            authorOpenUserId: initiatorOpenUserId,
-        }))
+            initiatorOpenUserId,
+        )
         
         await this.actionsLoggerService.logCreateAction({
             value: newDto,
             openUserId: initiatorOpenUserId,
-            config: this.model.getConfig(),
+            config: this.repository.getConfig(),
             rowId: newDto.id,
         })
         

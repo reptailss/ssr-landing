@@ -1,16 +1,15 @@
-import { ActionsLoggerService, AppError, SlugHelper } from 'os-core-ts'
-import { newsModel, NewsModel } from '@modules/news/model'
+import { ActionsLoggerService, AppError, Injectable, SlugHelper } from 'os-core-ts'
 import { NewsDto, UpdateMultilanguageNewsDto, UpdateNewsDto } from '@common/dto/newsDto'
-import { NewsMapper } from '@modules/news/mapper/NewsMapper'
-import { AppLocale, DEFAULT_APP_LOCALE } from '@common/locales'
+import { AppLocaleValue, DEFAULT_APP_LOCALE_VALUE } from '@common/locales'
+import { NewsRepository } from '@modules/news/repository'
 
+@Injectable()
 export class UpdateNewsService {
     
-    private newsMapper = new NewsMapper()
     
     constructor(
-        private readonly model: NewsModel = newsModel,
-        private readonly actionsLoggerService: ActionsLoggerService = new ActionsLoggerService(),
+        private readonly repository: NewsRepository,
+        private readonly actionsLoggerService: ActionsLoggerService,
     ) {
     }
     
@@ -25,7 +24,7 @@ export class UpdateNewsService {
         id: number
         slug?: string
     }): Promise<NewsDto> {
-        const oldDto = await this.model.findByPk(id)
+        const oldDto = await this.repository.findByPk(id)
         if (!oldDto) {
             throw new AppError('Not found.', {
                 errorKey: 'NOT_FOUND_ERROR',
@@ -37,11 +36,9 @@ export class UpdateNewsService {
             (typeof updateDto.title !== 'undefined' && updateDto.title !== oldDto.title) ||
             (typeof updateDto.locale !== 'undefined' && updateDto.locale !== oldDto.locale)
         ) {
-            const oldDtoBySlug = await this.model.findOne({
-                filters: {
-                    slug: targetSlug,
-                    locale: updateDto.locale || oldDto.locale,
-                },
+            const oldDtoBySlug = await this.repository.findOne({
+                slug: targetSlug,
+                locale: updateDto.locale || oldDto.locale,
             })
             
             if (oldDtoBySlug) {
@@ -51,18 +48,17 @@ export class UpdateNewsService {
             }
         }
         
-        const newDto = await this.model.update(this.newsMapper.updateNewsDtoToEntity({
+        const newDto = await this.repository.update({
             slug: targetSlug,
             updateDto,
-        }), {
-            filters: { id: id },
-            returning: true,
+            where: { id },
         })
+        
         await this.actionsLoggerService.logUpdateAction({
             oldValue: oldDto,
             newValue: newDto,
             openUserId: initiatorOpenUserId,
-            config: this.model.getConfig(),
+            config: this.repository.getConfig(),
             rowId: id,
         })
         
@@ -78,32 +74,30 @@ export class UpdateNewsService {
         updateMultilanguageDto: UpdateMultilanguageNewsDto
         slug: string
     }): Promise<number[]> {
-     
-        const defaultLocaleField = updateMultilanguageDto.multilanguage_field[DEFAULT_APP_LOCALE]
+        
+        const defaultLocaleField = updateMultilanguageDto.multilanguage_field[DEFAULT_APP_LOCALE_VALUE]
         
         if (!defaultLocaleField) {
             throw new AppError('Not found default local multilanguage fields', {
                 errorKey: 'VALIDATION_ERROR',
             })
         }
-        const oldNewsList = await this.model.findAll({
-            filters: {
+        const oldNewsList = await this.repository.findAll({
+            where: {
                 slug,
             },
         })
         
-        const oldNewsDtoDefaultLocal = oldNewsList.find((news) => news.locale === DEFAULT_APP_LOCALE)
+        const oldNewsDtoDefaultLocal = oldNewsList.find((news) => news.locale === DEFAULT_APP_LOCALE_VALUE)
         
         const targetSlug = oldNewsDtoDefaultLocal && oldNewsDtoDefaultLocal.title === defaultLocaleField.title ? slug : SlugHelper.generateSlug(defaultLocaleField.title)
         
         if (
             typeof oldNewsDtoDefaultLocal?.title !== 'undefined' && oldNewsDtoDefaultLocal.title !== defaultLocaleField.title
         ) {
-            const oldDtoBySlug = await this.model.findOne({
-                filters: {
-                    slug: targetSlug,
-                    locale: DEFAULT_APP_LOCALE,
-                },
+            const oldDtoBySlug = await this.repository.findOne({
+                slug: targetSlug,
+                locale: DEFAULT_APP_LOCALE_VALUE,
             })
             
             if (oldDtoBySlug) {
@@ -123,23 +117,21 @@ export class UpdateNewsService {
                     errorKey: 'NOT_FOUND_ERROR',
                 })
             }
-            const newDto = await this.model.update(this.newsMapper.updateNewsDtoToEntity({
+            const newDto = await this.repository.update({
                 slug: targetSlug,
                 updateDto: {
                     image: updateMultilanguageDto.base_field.image,
-                    locale: locale as AppLocale,
+                    locale: locale as AppLocaleValue,
                     title: multilanguageField.title,
                     content: multilanguageField.content,
                 },
-            }), {
-                filters: { id: oldDto.id },
-                returning: true,
+                where: { id: oldDto.id },
             })
             await this.actionsLoggerService.logUpdateAction({
                 oldValue: oldDto,
                 newValue: newDto,
                 openUserId: initiatorOpenUserId,
-                config: this.model.getConfig(),
+                config: this.repository.getConfig(),
                 rowId: oldDto.id,
             })
             

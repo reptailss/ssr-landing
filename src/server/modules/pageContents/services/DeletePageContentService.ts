@@ -1,12 +1,13 @@
-import { ActionsLoggerService, AppError } from 'os-core-ts'
-import { pageContentsModel, PageContentsModel } from '@modules/pageContents/model'
+import { ActionsLoggerService, AppError, Injectable } from 'os-core-ts'
 import { PageContentDto } from '@common/dto/pageContentDto'
-import { AppLocale } from '@common/locales'
+import { AppLocaleValue } from '@common/locales'
+import { PageContentsRepository } from '@modules/pageContents/repository'
 
+@Injectable()
 export class DeletePageContentService {
     constructor(
-        private readonly model: PageContentsModel = pageContentsModel,
-        private readonly actionsLoggerService: ActionsLoggerService = new ActionsLoggerService(),
+        private readonly repository: PageContentsRepository,
+        private readonly actionsLoggerService: ActionsLoggerService,
     ) {
     }
     
@@ -19,30 +20,27 @@ export class DeletePageContentService {
                                                }: {
         page: string,
         key: string,
-        locale?: AppLocale
+        locale?: AppLocaleValue
         initiatorOpenUserId: number
     }): Promise<PageContentDto> {
         
-        const oldDto = await this.model.findOne({
-            filters: {
-                page,
-                key,
-                ...(locale ? { locale } : {}),
-            },
+        const oldDto = await this.repository.findOne({
+            page,
+            key,
+            ...(locale ? { locale } : {}),
         })
+        
         if (!oldDto) {
             throw new AppError('Not found', {
                 errorKey: 'NOT_FOUND_ERROR',
             })
         }
-        await this.model.destroy({
-            filters: { id: oldDto.id },
-        })
+        await this.repository.destroy({ id: oldDto.id })
         
         await this.actionsLoggerService.logDeleteAction({
             oldValue: oldDto,
             openUserId: initiatorOpenUserId,
-            config: this.model.getConfig(),
+            config: this.repository.getConfig(),
             rowId: oldDto.id,
         })
         

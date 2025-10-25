@@ -1,39 +1,39 @@
 import {
-    AuthDec,
     BuildResponseFormat,
-    ControllerDec,
-    DeleteDec,
+    Controller,
+    Delete,
     MutateRowResult,
-    QueryParamDec,
-    QueryParamOptionalDec,
-    SwaggerInfoDec,
-    UserInfo,
+    QueryParam,
+    QueryParamOptional,
+    SwaggerInfo,
+    User,
+    UserDto,
 } from 'os-core-ts'
 import { DeleteSharedContentService } from '@modules/sharedContents/services/DeleteSharedContentService'
 import { SHARED_CONTENTS_ROUTE_PATHS } from '@common/apiRoutePaths/sharedContentRoutePaths'
-import { AppLocale } from '@common/locales'
+import { AppLocaleValue } from '@common/locales'
 import { CheckUserAccessService } from '@modules/userAccess/services/CheckUserAccessService'
 
-@ControllerDec()
+@Controller()
 export class DeleteSharedContentController {
     constructor(
-        private readonly deleteSharedContentService: DeleteSharedContentService = new DeleteSharedContentService(),
-        private readonly checkUserAccessService: CheckUserAccessService = new CheckUserAccessService(),
+        private readonly deleteSharedContentService: DeleteSharedContentService,
+        private readonly checkUserAccessService: CheckUserAccessService,
     ) {
     }
     
-    @SwaggerInfoDec({ summary: 'Delete shared-content by key' })
-    @DeleteDec(SHARED_CONTENTS_ROUTE_PATHS.deleteByKey)
+    @SwaggerInfo({ summary: 'Delete shared-content by key' })
+    @Delete(SHARED_CONTENTS_ROUTE_PATHS.deleteByKey)
     public async deleteSharedContentByKey(
-        @AuthDec userInfo: UserInfo,
-        @QueryParamDec('key') key: string,
-        @QueryParamOptionalDec('locale') locale: AppLocale,
+        @User() userDto: UserDto,
+        @QueryParam('key') key: string,
+        @QueryParamOptional('locale') locale: AppLocaleValue,
     ): Promise<MutateRowResult<number>> {
         
-        await this.checkUserAccessService.checkIsAdmins(userInfo.open_user_id)
+        await this.checkUserAccessService.checkIsAdmins(userDto.open_user_id)
         
         const oldDto = await this.deleteSharedContentService.deleteSharedContentByKey({
-            initiatorOpenUserId: userInfo.open_user_id,
+            initiatorOpenUserId: userDto.open_user_id,
             key,
             locale,
         })

@@ -4,10 +4,10 @@ import { MetaDescriptorBuilder } from 'os-react-ssr-client'
 import { MetaBuilder } from '@client-shared/meta/MetaBuilder'
 import { ClientGlobalData } from '@common/globalData'
 import { NotFoundClientPageData } from '@common/clientPageData/notFoundPageData'
-import { AppLocale, AppLocales } from '@common/locales'
+import { AppLocaleValue, AppLocaleValues } from '@common/locales'
 import { ContentLocalesHelper } from '@client-shared/locales/helper/ContentLocalesHelper'
 
-const SEO: Record<AppLocales[number], {
+const SEO: Record<AppLocaleValues[number], {
     title: string
     description: string
 }> = {
@@ -28,7 +28,7 @@ export const meta: MetaDescriptorBuilder<NotFoundClientPageData, ClientGlobalDat
         locale,
     },
 ) => {
-    const defaultContentByLocale = ContentLocalesHelper.getValueByLocale(locale as AppLocale, SEO)
+    const defaultContentByLocale = ContentLocalesHelper.getValueByLocale(locale as AppLocaleValue, SEO)
     return MetaBuilder.buildMetaDescriptions({
         title: defaultContentByLocale.title,
         description: defaultContentByLocale.description,

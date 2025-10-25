@@ -1,11 +1,12 @@
-import { ActionsLoggerService } from 'os-core-ts'
-import { sharedContentsModel, SharedContentsModel } from '@modules/sharedContents/model'
+import { ActionsLoggerService, Injectable } from 'os-core-ts'
 import { SharedContentDto, UpdateSharedContentDto } from '@common/dto/sharedContentDto'
+import { SharedContentsRepository } from '@modules/sharedContents/repository'
 
+@Injectable()
 export class UpdateSharedContentService {
     constructor(
-        private readonly model: SharedContentsModel = sharedContentsModel,
-        private readonly actionsLoggerService: ActionsLoggerService = new ActionsLoggerService(),
+        private readonly repository: SharedContentsRepository,
+        private readonly actionsLoggerService: ActionsLoggerService,
     ) {
     }
     
@@ -19,15 +20,14 @@ export class UpdateSharedContentService {
         oldDto: SharedContentDto
     }): Promise<SharedContentDto> {
         
-        const newDto = await this.model.update(updateDto, {
-            filters: { id: oldDto.id },
-            returning: true,
+        const newDto = await this.repository.update(updateDto, {
+            id: oldDto.id,
         })
         await this.actionsLoggerService.logUpdateAction({
             oldValue: oldDto,
             newValue: newDto,
             openUserId: initiatorOpenUserId,
-            config: this.model.getConfig(),
+            config: this.repository.getConfig(),
             rowId: oldDto.id,
         })
         

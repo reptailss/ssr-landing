@@ -1,12 +1,12 @@
 import {
-    AuthDec,
     BuildResponseFormat,
-    ControllerDec,
-    GetDec,
+    Controller,
+    Get,
+    PaginationParams,
     PaginationQueryParams,
-    PaginationQueryParamsDec,
-    SwaggerInfoDec,
-    UserInfo,
+    SwaggerInfo,
+    User,
+    UserDto,
 } from 'os-core-ts'
 import { ContactUsValidator } from '@modules/contactUs/validator/ContactUsValidator'
 import { GetAllContactUsService } from '@modules/contactUs/services/GetAllContactUsService'
@@ -19,23 +19,23 @@ const contactUsValidator = new ContactUsValidator()
 const contactUsDtoPaginationQueryParamsSchema =
     contactUsValidator.getContactUsDtoPaginationQueryParamsSchema()
 
-@ControllerDec()
+@Controller()
 export class GetAllContactUsController {
     constructor(
-        private readonly getAllContactUsService: GetAllContactUsService = new GetAllContactUsService(),
-        private readonly checkUserAccessService: CheckUserAccessService = new CheckUserAccessService(),
+        private readonly getAllContactUsService: GetAllContactUsService,
+        private readonly checkUserAccessService: CheckUserAccessService,
     ) {
     }
     
-    @SwaggerInfoDec({ summary: 'Get contactus list' })
-    @GetDec(CONTACT_US_ROUTE_PATHS.list)
+    @SwaggerInfo({ summary: 'Get contactus list' })
+    @Get(CONTACT_US_ROUTE_PATHS.list)
     public async getContactUsPagination(
-        @AuthDec userInfo: UserInfo,
-        @PaginationQueryParamsDec(contactUsDtoPaginationQueryParamsSchema)
+        @User() userDto: UserDto,
+        @PaginationParams(contactUsDtoPaginationQueryParamsSchema)
         params: PaginationQueryParams<ContactUsDto>,
     ): Promise<ContactUsListResponse> {
         
-        await this.checkUserAccessService.checkIsAdmins(userInfo.open_user_id)
+        await this.checkUserAccessService.checkIsAdmins(userDto.open_user_id)
         
         const paginationValues = await this.getAllContactUsService.getContactUsPagination(params)
         return BuildResponseFormat.pagination(paginationValues)

@@ -1,18 +1,18 @@
-import { AppLocale } from '@common/locales'
-import { appLogger } from 'os-core-ts'
+import { AppLocaleValue } from '@common/locales'
+import { appLogger, Injectable } from 'os-core-ts'
 import { GetAllPageContentsService } from '@modules/pageContents/services/getAllPageContentsService'
 
-
+@Injectable()
 export class ClientPageDataService {
     
     constructor(
-        private readonly getAllPageContentsService: GetAllPageContentsService = new GetAllPageContentsService(),
+        private readonly getAllPageContentsService: GetAllPageContentsService,
     ) {
     }
     
     public async getPageData<PageContent extends Record<string, unknown>>(
         page: string,
-        locale: AppLocale | null,
+        locale: AppLocaleValue | null,
     ): Promise<Partial<PageContent>> {
         try {
             const pageContentList = await this.getAllPageContentsService.getSimpleContentsByPage(

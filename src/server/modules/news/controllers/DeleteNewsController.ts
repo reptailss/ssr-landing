@@ -1,36 +1,36 @@
 import {
-    AuthDec,
     BuildResponseFormat,
-    ControllerDec,
-    DeleteDec,
+    Controller,
+    Delete,
     MutateRowResult,
-    ParamDec,
-    SwaggerInfoDec,
-    UserInfo,
+    Param,
+    SwaggerInfo,
+    User,
+    UserDto,
 } from 'os-core-ts'
 import { DeleteNewsService } from '@modules/news/services/DeleteNewsService'
 import { NEWS_ROUTE_PATHS } from '@common/apiRoutePaths/newsRoutePaths'
 import { CheckUserAccessService } from '@modules/userAccess/services/CheckUserAccessService'
 
-@ControllerDec()
+@Controller()
 export class DeleteNewsController {
     constructor(
-        private readonly deleteNewsService: DeleteNewsService = new DeleteNewsService(),
-        private readonly checkUserAccessService: CheckUserAccessService = new CheckUserAccessService(),
+        private readonly deleteNewsService: DeleteNewsService,
+        private readonly checkUserAccessService: CheckUserAccessService,
     ) {
     }
     
-    @SwaggerInfoDec({ summary: 'Delete multilanguage news' })
-    @DeleteDec(NEWS_ROUTE_PATHS.deleteMultilanguage)
+    @SwaggerInfo({ summary: 'Delete multilanguage news' })
+    @Delete(NEWS_ROUTE_PATHS.deleteMultilanguage)
     public async deleteMultilanguageNews(
-        @AuthDec userInfo: UserInfo,
-        @ParamDec('slug') slug: string,
+        @User() userDto: UserDto,
+        @Param('slug') slug: string,
     ): Promise<MutateRowResult<string>> {
         
-        await this.checkUserAccessService.checkIsAdmins(userInfo.open_user_id)
+        await this.checkUserAccessService.checkIsAdmins(userDto.open_user_id)
         
         const ids = await this.deleteNewsService.deleteMultilanguageNews({
-            initiatorOpenUserId: userInfo.open_user_id,
+            initiatorOpenUserId: userDto.open_user_id,
             slug,
         })
         return BuildResponseFormat.mutateRow(ids.join(','))

@@ -1,19 +1,17 @@
-import { ActionsLoggerService, AppFile, FileService } from 'os-core-ts'
+import { ActionsLoggerService, FileService, IAppFile, Injectable } from 'os-core-ts'
 import { CreateMediaFileDto, MediaFileDto } from '@modules/mediaLibrary/mediaFiles/dto'
 import { MediaFilesChecker } from '@modules/mediaLibrary/mediaFiles/checker/MediaFilesChecker'
-import { MediaFilesMapper } from '@modules/mediaLibrary/mediaFiles/mapper/MediaFilesMapper'
-import { mediaFilesModel, MediaFilesModel } from '@modules/mediaLibrary/mediaFiles/model'
 import { UploadFilesService } from '@modules/mediaLibrary/mediaFiles/services/UploadFilesService'
+import { MediaFilesRepository } from '@modules/mediaLibrary/mediaFiles/repository'
 
+@Injectable()
 export class CreateMediaFileService {
     
-    private readonly mediaFilesMapper = new MediaFilesMapper()
-    
     constructor(
-        private readonly model: MediaFilesModel = mediaFilesModel,
-        private readonly mediaFilesChecker: MediaFilesChecker = new MediaFilesChecker(),
-        private readonly uploadFilesService: UploadFilesService = new UploadFilesService(),
-        private readonly actionsLoggerService: ActionsLoggerService = new ActionsLoggerService(),
+        private readonly repository: MediaFilesRepository,
+        private readonly mediaFilesChecker: MediaFilesChecker,
+        private readonly uploadFilesService: UploadFilesService,
+        private readonly actionsLoggerService: ActionsLoggerService,
     ) {
     }
     
@@ -24,7 +22,7 @@ export class CreateMediaFileService {
                                        }: {
         initiatorOpenUserId: number
         createDto: CreateMediaFileDto
-        file: AppFile
+        file: IAppFile
     }): Promise<MediaFileDto> {
         
         await this.mediaFilesChecker.checkFolderId(createDto.folder_id)
@@ -62,16 +60,17 @@ export class CreateMediaFileService {
         mimetype: string | null
     }): Promise<MediaFileDto> {
         
-        const newDto = await this.model.create(this.mediaFilesMapper.createMediaFileDtoToEntity({
+        const newDto = await this.repository.create({
             createDto,
             openUserId: initiatorOpenUserId,
             file: filePath,
             mimetype,
-        }))
+        })
+        
         await this.actionsLoggerService.logCreateAction({
             value: newDto,
             openUserId: initiatorOpenUserId,
-            config: this.model.getConfig(),
+            config: this.repository.getConfig(),
             rowId: newDto.id,
         })
         

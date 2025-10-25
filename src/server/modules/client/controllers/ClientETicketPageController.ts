@@ -1,21 +1,21 @@
-import { ControllerDec, LocaleDec } from 'os-core-ts'
-import { ReactSsrDec } from 'os-react-ssr-server'
+import { Controller, AppLocale } from 'os-core-ts'
+import { ReactSsr } from 'os-react-ssr-server'
 import { ClientPageDataService } from '@modules/client/services/ClientPageDataService'
 import { CLIENT_ROUTE_PATHS } from '@common/clientRoutePaths'
-import { AppLocale } from '@common/locales'
+import { AppLocaleValue } from '@common/locales'
 import { BuildClientResponseFormat } from '@modules/client/clientResponseFormat/BuildClientResponseFormat'
 import { ETicketClientPageData } from '@common/clientPageData/eTicket'
 
-@ControllerDec()
+@Controller()
 export class ClientETicketPageController {
     constructor(
-        private readonly clientPageDataService: ClientPageDataService = new ClientPageDataService(),
+        private readonly clientPageDataService: ClientPageDataService,
     ) {
     }
     
-    @ReactSsrDec(CLIENT_ROUTE_PATHS.eTicket)
+    @ReactSsr(CLIENT_ROUTE_PATHS.eTicket)
     public async eTicket(
-        @LocaleDec locale: AppLocale | null,
+        @AppLocale() locale: AppLocaleValue | null,
     ): Promise<ETicketClientPageData> {
         
         const pageData = await this.clientPageDataService.getPageData(

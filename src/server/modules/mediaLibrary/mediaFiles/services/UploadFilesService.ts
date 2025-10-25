@@ -1,8 +1,9 @@
-import { AppFile, FileHelper, FileService } from 'os-core-ts'
+import { FileHelper, FileService, IAppFile, Injectable } from 'os-core-ts'
 
+@Injectable()
 export class UploadFilesService {
     
-    public async saveFile(appFile: AppFile): Promise<{
+    public async saveFile(appFile: IAppFile): Promise<{
         filePath: string
     }> {
         return FileService.save({

@@ -3,14 +3,14 @@ import {AdminAuthRequest, IMultilanguagePostManagerProvider} from 'admin-panel-b
 import {NEWS_ROUTE_PATHS} from '@common/apiRoutePaths/newsRoutePaths'
 import {AdminServerApiUrlBuilder} from '@admin-helpers/AdminServerApiUrlBuilder'
 import {MultilanguageNewsResponse, NewsListResponse} from '@common/apiResponses/newsResponses'
-import {AppLocales} from '@common/locales'
+import {AppLocaleValues} from '@common/locales'
 
 
 export class AdminMultilanguageNewsManagerProvider implements IMultilanguagePostManagerProvider<
 	NewsDto,
 	BaseCreateFieldsNewsDto,
 	MultilanguageCreateFieldsNewsDto,
-	AppLocales
+	AppLocaleValues
 > {
 	public async createPost({
 								baseField,
@@ -18,7 +18,7 @@ export class AdminMultilanguageNewsManagerProvider implements IMultilanguagePost
 								token,
 							}: {
 		baseField: BaseCreateFieldsNewsDto
-		multilanguageField: Record<AppLocales[number], MultilanguageCreateFieldsNewsDto>
+		multilanguageField: Record<AppLocaleValues[number], MultilanguageCreateFieldsNewsDto>
 		token: string | null
 	}): Promise<void> {
 		await AdminAuthRequest.post({
@@ -42,7 +42,7 @@ export class AdminMultilanguageNewsManagerProvider implements IMultilanguagePost
 							}: {
 		post: NewsDto,
 		baseField: BaseCreateFieldsNewsDto
-		multilanguageField: Record<AppLocales[number], MultilanguageCreateFieldsNewsDto>
+		multilanguageField: Record<AppLocaleValues[number], MultilanguageCreateFieldsNewsDto>
 		token: string | null
 	}): Promise<void> {
 		await AdminAuthRequest.put({
@@ -85,7 +85,7 @@ export class AdminMultilanguageNewsManagerProvider implements IMultilanguagePost
 		post: NewsDto
 	}): Promise<{
 		baseField: BaseCreateFieldsNewsDto
-		multilanguageField: Record<AppLocales[number], MultilanguageCreateFieldsNewsDto>
+		multilanguageField: Record<AppLocaleValues[number], MultilanguageCreateFieldsNewsDto>
 	}> {
 		const res:MultilanguageNewsResponse = await AdminAuthRequest.get({
 			url: AdminServerApiUrlBuilder.build(NEWS_ROUTE_PATHS.getMultilanguage),
@@ -96,7 +96,7 @@ export class AdminMultilanguageNewsManagerProvider implements IMultilanguagePost
 		})
 		return {
 			baseField: res.row.base_field,
-			multilanguageField: res.row.multilanguage_field as Record<AppLocales[number], MultilanguageCreateFieldsNewsDto>
+			multilanguageField: res.row.multilanguage_field as Record<AppLocaleValues[number], MultilanguageCreateFieldsNewsDto>
 		}
 	}
 	

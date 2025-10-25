@@ -1,5 +1,6 @@
 import { CLIENT_ROUTE_PATHS } from '@common/clientRoutePaths'
 import { APP_SERVER_CONFIG } from '@config'
+import { Injectable } from 'os-core-ts'
 
 const PRIORITIES: Record<string, string> = {
     [CLIENT_ROUTE_PATHS.home]: '1.0',
@@ -16,6 +17,7 @@ const PRIORITIES: Record<string, string> = {
 
 const CHANGEFREQ = 'monthly'
 
+@Injectable()
 export class ClientSiteMapService {
     public generateSiteMap(): string {
         

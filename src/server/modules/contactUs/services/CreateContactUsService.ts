@@ -1,16 +1,15 @@
-import { ActionsLoggerService } from 'os-core-ts'
-import { contactUsModel, ContactUsModel } from '@modules/contactUs/model'
+import { ActionsLoggerService, Injectable } from 'os-core-ts'
 import { ContactUsDto, CreateContactUsDto } from '@common/dto/contactUsDto'
-import { ContactUsMapper } from '@modules/contactUs/mapper/ContactUsMapper'
 import { ContactUsMailer } from '@modules/contactUs/services/ContactUsMailer'
+import { ContactUsRepository } from '@modules/contactUs/repository'
 
+@Injectable()
 export class CreateContactUsService {
-    private readonly contactUsMapper = new ContactUsMapper()
     
     constructor(
-        private readonly model: ContactUsModel = contactUsModel,
-        private readonly contactUsMailer: ContactUsMailer = new ContactUsMailer(),
-        private readonly actionsLoggerService: ActionsLoggerService = new ActionsLoggerService(),
+        private readonly repository: ContactUsRepository,
+        private readonly contactUsMailer: ContactUsMailer,
+        private readonly actionsLoggerService: ActionsLoggerService,
     ) {
     }
     
@@ -24,15 +23,15 @@ export class CreateContactUsService {
         recipientEmails: string[]
     }): Promise<ContactUsDto> {
         
-        const newDto = await this.model.create(this.contactUsMapper.createContactUsDtoToEntity({
+        const newDto = await this.repository.create(
             createDto,
-            status: 'pending',
-        }))
+            'pending',
+        )
         
         await this.actionsLoggerService.logCreateAction({
             value: newDto,
             openUserId: initiatorOpenUserId,
-            config: this.model.getConfig(),
+            config: this.repository.getConfig(),
             rowId: newDto.id,
         })
         

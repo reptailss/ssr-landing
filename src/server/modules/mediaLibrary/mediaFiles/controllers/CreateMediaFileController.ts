@@ -1,14 +1,14 @@
 import {
     AppFile,
-    AppFileDec,
-    AuthDec,
+    AppFormData,
     BuildResponseFormat,
-    ControllerDec,
-    FormDataDec,
+    Controller,
+    IAppFile,
     MutateRowResult,
-    PostDec,
-    SwaggerInfoDec,
-    UserInfo,
+    Post,
+    SwaggerInfo,
+    User,
+    UserDto,
 } from 'os-core-ts'
 import { MediaFilesValidator } from '@modules/mediaLibrary/mediaFiles/validator/MediaFilesValidator'
 import { CreateMediaFileService } from '@modules/mediaLibrary/mediaFiles/services/CreateMediaFileService'
@@ -20,29 +20,29 @@ const mediaFilesValidator = new MediaFilesValidator()
 
 const createMediaFileDtoSchema = mediaFilesValidator.getCreateMediaFileDtoSchema()
 
-@ControllerDec()
+@Controller()
 export class CreateMediaFileController {
     constructor(
-        private readonly createMediaFileService: CreateMediaFileService = new CreateMediaFileService(),
-        private readonly checkUserAccessService: CheckUserAccessService = new CheckUserAccessService(),
+        private readonly createMediaFileService: CreateMediaFileService,
+        private readonly checkUserAccessService: CheckUserAccessService,
     ) {
     }
     
-    @SwaggerInfoDec({ summary: 'Add new media-file' })
-    @PostDec(MEDIA_FILES_ROUTE_PATHS.add)
+    @SwaggerInfo({ summary: 'Add new media-file' })
+    @Post(MEDIA_FILES_ROUTE_PATHS.add)
     public async createMediaFile(
-        @FormDataDec(createMediaFileDtoSchema) createDto: CreateMediaFileDto,
-        @AppFileDec({
+        @AppFormData(createMediaFileDtoSchema) createDto: CreateMediaFileDto,
+        @AppFile({
             fileKey: 'file',
             required: true,
-        }) file: AppFile,
-        @AuthDec userInfo: UserInfo,
+        }) file: IAppFile,
+        @User() userDto: UserDto,
     ): Promise<MutateRowResult<number>> {
         
-        await this.checkUserAccessService.checkIsAdmins(userInfo.open_user_id)
+        await this.checkUserAccessService.checkIsAdmins(userDto.open_user_id)
         
         const newDto = await this.createMediaFileService.createMediaFileByFile({
-            initiatorOpenUserId: userInfo.open_user_id,
+            initiatorOpenUserId: userDto.open_user_id,
             createDto,
             file,
         })

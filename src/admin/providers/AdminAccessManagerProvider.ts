@@ -1,6 +1,6 @@
 import { AdminAuthRequest, IAccessManagerProvider } from 'admin-panel-builder'
 import { AdminServerApiUrlBuilder } from '@admin-helpers/AdminServerApiUrlBuilder'
-import { UserDto } from '@common/dto/userDto'
+import { AppUserDto } from '@common/dto/userDto'
 import { USER_ACCESS_ROUTE_PATHS } from '@common/apiRoutePaths/userAccessRoutePaths'
 import { UserAccessResponse } from '@common/apiResponses/userAccessResponses'
 import { ALL_USER_ROLES } from '@common/userRoles'
@@ -8,15 +8,15 @@ import { USERS_ROUTE_PATHS } from '@common/apiRoutePaths/usersRoutePaths'
 import { UsersListResponse } from '@common/apiResponses/usersResponses'
 
 
-export class AccessProvider implements IAccessManagerProvider<UserDto> {
+export class AccessProvider implements IAccessManagerProvider<AppUserDto> {
     public async saveUserRoles({
                                    roles,
                                    token,
-                                   userInfo,
+                                   userDto,
                                }: {
         roles: string[]
         token: string | null
-        userInfo: UserDto
+        userDto: AppUserDto
     }): Promise<void> {
         await AdminAuthRequest.post({
             url: AdminServerApiUrlBuilder.build(USER_ACCESS_ROUTE_PATHS.save),
@@ -25,7 +25,7 @@ export class AccessProvider implements IAccessManagerProvider<UserDto> {
                 'content-type': 'application/json',
             },
             body: JSON.stringify({
-                open_user_id: userInfo.open_user_id,
+                open_user_id: userDto.open_user_id,
                 roles,
                 
             }),
@@ -34,26 +34,26 @@ export class AccessProvider implements IAccessManagerProvider<UserDto> {
     
     public async deleteUserRoles({
                                      token,
-                                     userInfo,
+                                     userDto,
                                  }: {
         token: string | null
-        userInfo: UserDto
+        userDto: AppUserDto
     }): Promise<void> {
         await AdminAuthRequest.delete({
             url: AdminServerApiUrlBuilder.build(USER_ACCESS_ROUTE_PATHS.deleteByOpenUserId),
             token: token || '',
             pathParams: {
-                open_user_id: userInfo.open_user_id,
+                open_user_id: userDto.open_user_id,
             },
         })
     }
     
     public async getUserRoles({
                                   token,
-                                  userInfo,
+                                  userDto,
                               }: {
         token: string | null
-        userInfo: UserDto
+        userDto: AppUserDto
     }): Promise<{
         roles: string[]
     }> {
@@ -62,7 +62,7 @@ export class AccessProvider implements IAccessManagerProvider<UserDto> {
                 url: AdminServerApiUrlBuilder.build(USER_ACCESS_ROUTE_PATHS.getByOpenUserId),
                 token: token || '',
                 pathParams: {
-                    open_user_id: userInfo.open_user_id,
+                    open_user_id: userDto.open_user_id,
                 },
             })
             return {
@@ -87,7 +87,7 @@ export class AccessProvider implements IAccessManagerProvider<UserDto> {
                               token,
                           }: {
         token: string | null
-    }): Promise<UserDto[]> {
+    }): Promise<AppUserDto[]> {
         const res: UsersListResponse = await AdminAuthRequest.get({
             url: AdminServerApiUrlBuilder.build(USERS_ROUTE_PATHS.list),
             token: token || '',

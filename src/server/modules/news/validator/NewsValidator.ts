@@ -5,7 +5,7 @@ import {
     SchemaValidator,
     Validator,
 } from 'os-core-ts'
-import { AppLocale } from '@common/locales'
+import { AppLocaleValue } from '@common/locales'
 import { CreateMultilanguageNewsDto, CreateNewsDto, NewsDto, UpdateNewsDto } from '@common/dto/newsDto'
 
 export class NewsValidator {
@@ -16,7 +16,7 @@ export class NewsValidator {
         return Validator.object({
             title: Validator.string().max(255),
             content: Validator.string(),
-            locale: Validator.string().max(255) as SchemaValidator<AppLocale>,
+            locale: Validator.string().max(255) as SchemaValidator<AppLocaleValue>,
             image: Validator.string().max(255),
         })
     }

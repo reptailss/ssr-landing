@@ -1,13 +1,4 @@
-import {
-    AuthDec,
-    BodyDec,
-    BuildResponseFormat,
-    ControllerDec,
-    MutateRowResult,
-    PostDec,
-    SwaggerInfoDec,
-    UserInfo,
-} from 'os-core-ts'
+import { Body, BuildResponseFormat, Controller, MutateRowResult, Post, SwaggerInfo, User, UserDto } from 'os-core-ts'
 import { SharedContentsValidator } from '@modules/sharedContents/validator/SharedContentsValidator'
 import { CreateSharedContentDto } from '@common/dto/sharedContentDto'
 import { SHARED_CONTENTS_ROUTE_PATHS } from '@common/apiRoutePaths/sharedContentRoutePaths'
@@ -18,25 +9,25 @@ const sharedContentsValidator = new SharedContentsValidator()
 
 const createSharedContentBodySchema = sharedContentsValidator.getCreateSharedContentDtoSchema()
 
-@ControllerDec()
+@Controller()
 export class SaveSharedContentController {
     constructor(
-        private readonly saveSharedContentService: SaveSharedContentService = new SaveSharedContentService(),
-        private readonly checkUserAccessService: CheckUserAccessService = new CheckUserAccessService(),
+        private readonly saveSharedContentService: SaveSharedContentService,
+        private readonly checkUserAccessService: CheckUserAccessService,
     ) {
     }
     
-    @SwaggerInfoDec({ summary: 'Save shared-content by key' })
-    @PostDec(SHARED_CONTENTS_ROUTE_PATHS.save)
+    @SwaggerInfo({ summary: 'Save shared-content by key' })
+    @Post(SHARED_CONTENTS_ROUTE_PATHS.save)
     public async saveSharedContent(
-        @BodyDec(createSharedContentBodySchema) body: CreateSharedContentDto,
-        @AuthDec userInfo: UserInfo,
+        @Body(createSharedContentBodySchema) body: CreateSharedContentDto,
+        @User() userDto: UserDto,
     ): Promise<MutateRowResult<number>> {
         
-        await this.checkUserAccessService.checkIsAdmins(userInfo.open_user_id)
+        await this.checkUserAccessService.checkIsAdmins(userDto.open_user_id)
         
         const newDto = await this.saveSharedContentService.saveSharedContent({
-            initiatorOpenUserId: userInfo.open_user_id,
+            initiatorOpenUserId: userDto.open_user_id,
             createDto: body,
         })
         return BuildResponseFormat.mutateRow(newDto.id)

@@ -1,12 +1,12 @@
 import {
-    AuthDec,
-    BodyDec,
+    User,
+    Body,
     BuildResponseFormat,
-    ControllerDec,
+    Controller,
     MutateRowResult,
-    PostDec,
-    SwaggerInfoDec,
-    UserInfo,
+    Post,
+    SwaggerInfo,
+    UserDto,
 } from 'os-core-ts'
 import { PageContentsValidator } from '@modules/pageContents/validator/PageContentsValidator'
 import { CreatePageContentDto } from '@common/dto/pageContentDto'
@@ -18,25 +18,25 @@ const pageContentsValidator = new PageContentsValidator()
 
 const createPageContentDtoSchema = pageContentsValidator.getCreatePageContentDtoSchema()
 
-@ControllerDec()
+@Controller()
 export class SavePageContentController {
     constructor(
-        private readonly savePageContentService: SavePageContentService = new SavePageContentService(),
-        private readonly checkUserAccessService: CheckUserAccessService = new CheckUserAccessService(),
+        private readonly savePageContentService: SavePageContentService ,
+        private readonly checkUserAccessService: CheckUserAccessService ,
     ) {
     }
     
-    @SwaggerInfoDec({ summary: 'Save page-content by page and key' })
-    @PostDec(PAGE_CONTENTS_ROUTE_PATHS.save)
+    @SwaggerInfo({ summary: 'Save page-content by page and key' })
+    @Post(PAGE_CONTENTS_ROUTE_PATHS.save)
     public async savePageContent(
-        @BodyDec(createPageContentDtoSchema) body: CreatePageContentDto,
-        @AuthDec userInfo: UserInfo,
+        @Body(createPageContentDtoSchema) body: CreatePageContentDto,
+        @User() userDto: UserDto,
     ): Promise<MutateRowResult<number>> {
         
-        await this.checkUserAccessService.checkIsAdmins(userInfo.open_user_id)
+        await this.checkUserAccessService.checkIsAdmins(userDto.open_user_id)
         
         const newDto = await this.savePageContentService.savePageContent({
-            initiatorOpenUserId: userInfo.open_user_id,
+            initiatorOpenUserId: userDto.open_user_id,
             createDto: body,
         })
         return BuildResponseFormat.mutateRow(newDto.id)

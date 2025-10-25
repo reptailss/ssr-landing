@@ -1,13 +1,13 @@
 import {
-    AuthDec,
-    BodyDec,
+    Body,
     BuildResponseFormat,
-    ControllerDec,
+    Controller,
     MutateRowResult,
-    ParamNumDec,
-    PutDec,
-    SwaggerInfoDec,
-    UserInfo,
+    Param,
+    Put,
+    SwaggerInfo,
+    User,
+    UserDto,
 } from 'os-core-ts'
 import { MediaFoldersValidator } from '@modules/mediaLibrary/mediaFolders/validator/MediaFoldersValidator'
 import { UpdateMediaFolderService } from '@modules/mediaLibrary/mediaFolders/services/UpdateMediaFolderService'
@@ -19,27 +19,27 @@ const mediaFoldersValidator = new MediaFoldersValidator()
 
 const updateMediaFolderDtoSchema = mediaFoldersValidator.getUpdateMediaFolderDtoSchema()
 
-@ControllerDec()
+@Controller()
 export class UpdateMediaFolderController {
     constructor(
-        private readonly updateMediaFolderService: UpdateMediaFolderService = new UpdateMediaFolderService(),
-        private readonly checkUserAccessService: CheckUserAccessService = new CheckUserAccessService(),
+        private readonly updateMediaFolderService: UpdateMediaFolderService,
+        private readonly checkUserAccessService: CheckUserAccessService,
     ) {
     }
     
-    @SwaggerInfoDec({ summary: 'Update media-folder by id' })
-    @PutDec(MEDIA_FOLDERS_ROUTE_PATHS.update)
+    @SwaggerInfo({ summary: 'Update media-folder by id' })
+    @Put(MEDIA_FOLDERS_ROUTE_PATHS.update)
     public async updateMediaFolder(
-        @BodyDec(updateMediaFolderDtoSchema) updateDto: UpdateMediaFolderDto,
-        @AuthDec userInfo: UserInfo,
-        @ParamNumDec('id') id: number,
+        @Body(updateMediaFolderDtoSchema) updateDto: UpdateMediaFolderDto,
+        @User() userDto: UserDto,
+        @Param('id') id: number,
     ): Promise<MutateRowResult<number>> {
         
-        await this.checkUserAccessService.checkIsAdmins(userInfo.open_user_id)
+        await this.checkUserAccessService.checkIsAdmins(userDto.open_user_id)
         
         
         const newDto = await this.updateMediaFolderService.updateMediaFolder({
-            initiatorOpenUserId: userInfo.open_user_id,
+            initiatorOpenUserId: userDto.open_user_id,
             updateDto,
             id,
         })

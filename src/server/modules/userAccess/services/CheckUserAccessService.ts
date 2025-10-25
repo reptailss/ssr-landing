@@ -1,10 +1,11 @@
 import { GetUserAccessService } from '@modules/userAccess/services/GetUserAccessService'
-import { AppError } from 'os-core-ts'
+import { AppError, Injectable } from 'os-core-ts'
 import { ADMINS_USER_ROLES, USER_ROLES } from '@common/userRoles'
 
+@Injectable()
 export class CheckUserAccessService {
     
-    constructor(private readonly getUserAccessService = new GetUserAccessService()) {
+    constructor(private readonly getUserAccessService: GetUserAccessService) {
     }
     
     

@@ -1,17 +1,16 @@
-import { ActionsLoggerService } from 'os-core-ts'
-import { MediaFoldersMapper } from '@modules/mediaLibrary/mediaFolders/mapper/MediaFoldersMapper'
+import { ActionsLoggerService, Injectable } from 'os-core-ts'
 import { MediaFoldersChecker } from '@modules/mediaLibrary/mediaFolders/checker/MediaFoldersChecker'
-import { MediaFoldersModel, mediaFoldersModel } from '@modules/mediaLibrary/mediaFolders/model'
 import { CreateMediaFolderDto, MediaFolderDto } from '@common/dto/mediaFolderDto'
+import { MediaFoldersRepository } from '@modules/mediaLibrary/mediaFolders/repository'
 
+@Injectable()
 export class CreateMediaFolderService {
     
-    private readonly mediaFoldersMapper = new MediaFoldersMapper()
     
     constructor(
-        private readonly model: MediaFoldersModel = mediaFoldersModel,
-        private readonly mediaFoldersChecker: MediaFoldersChecker = new MediaFoldersChecker(),
-        private readonly actionsLoggerService: ActionsLoggerService = new ActionsLoggerService(),
+        private readonly repository: MediaFoldersRepository,
+        private readonly mediaFoldersChecker: MediaFoldersChecker,
+        private readonly actionsLoggerService: ActionsLoggerService,
     ) {
     }
     
@@ -30,14 +29,15 @@ export class CreateMediaFolderService {
             name: createDto.name,
         })
         
-        const newDto = await this.model.create(this.mediaFoldersMapper.createMediaFolderDtoToEntity({
+        const newDto = await this.repository.create(
             createDto,
-            openUserId: initiatorOpenUserId,
-        }))
+            initiatorOpenUserId,
+        )
+        
         await this.actionsLoggerService.logCreateAction({
             value: newDto,
             openUserId: initiatorOpenUserId,
-            config: this.model.getConfig(),
+            config: this.repository.getConfig(),
             rowId: newDto.id,
         })
         

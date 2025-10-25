@@ -1,9 +1,10 @@
 import { GetUserService } from '@modules/users/services/GetUserService'
-import { AppError } from 'os-core-ts'
+import { AppError, Injectable } from 'os-core-ts'
 
+@Injectable()
 export class UserAccessChecker {
     
-    constructor(private readonly getUserService = new GetUserService()) {
+    constructor(private readonly getUserService: GetUserService) {
     }
     
     public async checkOpenUserId(openUserId: number): Promise<void> {

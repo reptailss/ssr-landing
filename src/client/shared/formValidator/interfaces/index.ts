@@ -1,17 +1,17 @@
-import { AppLocale } from '@common/locales'
+import { AppLocaleValue } from '@common/locales'
 
 export type ObjectValueSchemaFormValidator = { [k: string]: IFormValidator };
 
 
 export interface IFormValidatorSchema<Shape extends ObjectValueSchemaFormValidator> {
     
-    validate(value: unknown, locale?: AppLocale | null): FormValidatorSchemaResult<Shape>
+    validate(value: unknown, locale?: AppLocaleValue | null): FormValidatorSchemaResult<Shape>
     
     getShape(): Shape
 }
 
 export interface IFormValidator<Type = any> {
-    validate(value: Type | unknown, locale?: AppLocale | null): FormValidatorResult
+    validate(value: Type | unknown, locale?: AppLocaleValue | null): FormValidatorResult
 }
 
 export type FormValidatorResult = {

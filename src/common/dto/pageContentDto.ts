@@ -1,4 +1,4 @@
-import { AppLocale } from '@common/locales'
+import { AppLocaleValue } from '@common/locales'
 
 
 export type PageContentDto<Value = object> = CreatePageContentDto<Value> & {
@@ -14,5 +14,5 @@ export type CreatePageContentDto<Value = object> = {
     key: string
     value: Value
     page: string
-    locale: AppLocale
+    locale: AppLocaleValue
 }

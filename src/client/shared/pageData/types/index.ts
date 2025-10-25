@@ -1,3 +1,3 @@
-import { AppLocales } from '@common/locales'
+import { AppLocaleValues } from '@common/locales'
 
-export type PagePageContentDefaultValues<Value> = Record<AppLocales[number], Value>
+export type PagePageContentDefaultValues<Value> = Record<AppLocaleValues[number], Value>

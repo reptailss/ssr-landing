@@ -1,13 +1,13 @@
 import {
-    AuthDec,
-    BodyDec,
+    Body,
     BuildResponseFormat,
-    ControllerDec,
+    Controller,
     MutateRowResult,
-    ParamDec,
-    PutDec,
-    SwaggerInfoDec,
-    UserInfo,
+    Param,
+    Put,
+    SwaggerInfo,
+    User,
+    UserDto,
 } from 'os-core-ts'
 import { NewsValidator } from '@modules/news/validator/NewsValidator'
 import { UpdateNewsService } from '@modules/news/services/UpdateNewsService'
@@ -19,27 +19,27 @@ const newsValidator = new NewsValidator()
 
 const createMultilanguageNewsDtoSchema = newsValidator.getCreateMultilanguageNewsDtoSchema()
 
-@ControllerDec()
+@Controller()
 export class UpdateNewsController {
     constructor(
-        private readonly updateNewsService: UpdateNewsService = new UpdateNewsService(),
-        private readonly checkUserAccessService: CheckUserAccessService = new CheckUserAccessService(),
+        private readonly updateNewsService: UpdateNewsService,
+        private readonly checkUserAccessService: CheckUserAccessService,
     ) {
     }
     
     
-    @SwaggerInfoDec({ summary: 'Update multilanguage news' })
-    @PutDec(NEWS_ROUTE_PATHS.updateMultilanguage)
+    @SwaggerInfo({ summary: 'Update multilanguage news' })
+    @Put(NEWS_ROUTE_PATHS.updateMultilanguage)
     public async updateMultilanguageNews(
-        @BodyDec<CreateMultilanguageNewsDto>(createMultilanguageNewsDtoSchema) body: CreateMultilanguageNewsDto,
-        @AuthDec userInfo: UserInfo,
-        @ParamDec('slug') slug: string,
+        @Body<CreateMultilanguageNewsDto>(createMultilanguageNewsDtoSchema) body: CreateMultilanguageNewsDto,
+        @User() userDto: UserDto,
+        @Param('slug') slug: string,
     ): Promise<MutateRowResult<string>> {
         
-        await this.checkUserAccessService.checkIsAdmins(userInfo.open_user_id)
+        await this.checkUserAccessService.checkIsAdmins(userDto.open_user_id)
         
         const ids = await this.updateNewsService.updateMultilanguageNews({
-            initiatorOpenUserId: userInfo.open_user_id,
+            initiatorOpenUserId: userDto.open_user_id,
             updateMultilanguageDto: body,
             slug,
         })

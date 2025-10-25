@@ -1,11 +1,11 @@
 import {
     BuildResponseFormat,
-    ControllerDec,
-    GetDec,
+    Controller,
+    Get,
     PaginationQueryParams,
-    PaginationQueryParamsDec,
+    PaginationParams,
     PaginationResult,
-    SwaggerInfoDec,
+    SwaggerInfo,
 } from 'os-core-ts'
 import { NewsValidator } from '@modules/news/validator/NewsValidator'
 import { GetAllNewsService } from '@modules/news/services/GetAllNewsService'
@@ -15,15 +15,15 @@ import { NewsDto } from '@common/dto/newsDto'
 const newsValidator = new NewsValidator()
 const newsDtoPaginationQueryParamsSchema = newsValidator.getNewsDtoPaginationQueryParamsSchema()
 
-@ControllerDec()
+@Controller()
 export class GetAllNewsController {
-    constructor(private readonly getAllNewsService: GetAllNewsService = new GetAllNewsService()) {
+    constructor(private readonly getAllNewsService: GetAllNewsService) {
     }
     
-    @SwaggerInfoDec({ summary: 'Get news list' })
-    @GetDec(NEWS_ROUTE_PATHS.list)
+    @SwaggerInfo({ summary: 'Get news list' })
+    @Get(NEWS_ROUTE_PATHS.list)
     public async getNewsPagination(
-        @PaginationQueryParamsDec(newsDtoPaginationQueryParamsSchema)
+        @PaginationParams(newsDtoPaginationQueryParamsSchema)
         params: PaginationQueryParams<NewsDto>,
     ): Promise<PaginationResult<NewsDto>> {
         const paginationValues = await this.getAllNewsService.getNewsPagination(params)

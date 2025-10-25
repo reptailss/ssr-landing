@@ -1,6 +1,6 @@
 {
 	"name": "gis-landing",
-	"version": "1.0.0",
+	"version": "1.0.5",
 	"description": "",
 	"main": "./src/index.ts",
 	"scripts": {
@@ -9,7 +9,6 @@
 		"build": "npm run b-page-default-content-json & npm run b-server & npm run b-admin-client && npm run b-ssr-client",
 		"b-server": "tspc --build ./tsconfig-build.json",
 		"g-swagger": "npx os-core-ts g-swagger",
-		"g-crud": "npx os-core-ts g-crud",
 		"b-ssr-client": "npx os-react-ssr-compiler b-ssr-client",
 		"dev-ssr-client": "npx os-react-ssr-compiler dev-ssr-client",
 		"b-admin-client": "npx admin-panel-builder b-admin-client",
@@ -25,7 +24,7 @@
 		"os-react-ssr-client": "git+https://github.com/reptailss/react-ssr-client.git#master",
 		"os-react-ssr-compiler": "git+https://github.com/reptailss/react-ssr-compiler.git#master",
 		"os-react-ssr-css": "git+https://github.com/reptailss/react-ssr-css.git#master",
-		"os-react-ssr-server": "git+https://github.com/reptailss/admin-panel-builder.git#master",
+		"os-react-ssr-server": "git+https://github.com/reptailss/react-ssr-server.git#master",
 		"react": "18.3.1",
 		"react-dom": "18.3.1",
 		"react-player": "3.3.1",

@@ -1,6 +1,6 @@
 
 
-export type UserDto = CreateUserDto & {
+export type AppUserDto = CreateAppUserDto & {
     open_user_id: number
     id: number
     date_add: Date
@@ -8,9 +8,9 @@ export type UserDto = CreateUserDto & {
 }
 
 
-export type UpdateUserDto = Partial<CreateUserDto>
+export type UpdateAppUserDto = Partial<CreateAppUserDto>
 
-export type CreateUserDto = {
+export type CreateAppUserDto = {
     family_name: string
     given_name: string
     email: string

@@ -1,11 +1,4 @@
-import {
-    BuildResponseFormat,
-    ControllerDec,
-    GetDec,
-    PaginationQueryParams,
-    PaginationQueryParamsDec,
-    SwaggerInfoDec,
-} from 'os-core-ts'
+import { BuildResponseFormat, Controller, Get, PaginationParams, PaginationQueryParams, SwaggerInfo } from 'os-core-ts'
 import { MediaFilesValidator } from '@modules/mediaLibrary/mediaFiles/validator/MediaFilesValidator'
 import { GetAllMediaFilesService } from '@modules/mediaLibrary/mediaFiles/services/GetAllMediaFilesService'
 import { MediaFileDto } from '@modules/mediaLibrary/mediaFiles/dto'
@@ -17,17 +10,17 @@ const mediaFilesValidator = new MediaFilesValidator()
 const mediaFileDtoPaginationQueryParamsSchema =
     mediaFilesValidator.getMediaFileDtoPaginationQueryParamsSchema()
 
-@ControllerDec()
+@Controller()
 export class GetAllMediaFileController {
     constructor(
-        private readonly getAllMediaFileService: GetAllMediaFilesService = new GetAllMediaFilesService(),
+        private readonly getAllMediaFileService: GetAllMediaFilesService,
     ) {
     }
     
-    @SwaggerInfoDec({ summary: 'Get media-files list' })
-    @GetDec(MEDIA_FILES_ROUTE_PATHS.list)
+    @SwaggerInfo({ summary: 'Get media-files list' })
+    @Get(MEDIA_FILES_ROUTE_PATHS.list)
     public async getMediaFilesPagination(
-        @PaginationQueryParamsDec(mediaFileDtoPaginationQueryParamsSchema)
+        @PaginationParams(mediaFileDtoPaginationQueryParamsSchema)
         params: PaginationQueryParams<MediaFileDto>,
     ): Promise<MediaFilesListResponse> {
         const paginationValues = await this.getAllMediaFileService.getMediaFilesPagination(params)

@@ -1,35 +1,35 @@
 import {
-    AuthDec,
     BuildResponseFormat,
-    ControllerDec,
-    DeleteDec,
+    Controller,
+    Delete,
     MutateRowResult,
-    ParamNumDec,
-    SwaggerInfoDec,
-    UserInfo,
+    Param,
+    SwaggerInfo,
+    User,
+    UserDto,
 } from 'os-core-ts'
 import { DeleteMediaFileService } from '@modules/mediaLibrary/mediaFiles/services/DeleteMediaFileService'
 import { MEDIA_FILES_ROUTE_PATHS } from '@common/apiRoutePaths/mediaFilesRoutePaths'
 import { CheckUserAccessService } from '@modules/userAccess/services/CheckUserAccessService'
 
-@ControllerDec()
+@Controller()
 export class DeleteMediaFileController {
     constructor(
-        private readonly deleteMediaFileService: DeleteMediaFileService = new DeleteMediaFileService(),
-        private readonly checkUserAccessService: CheckUserAccessService = new CheckUserAccessService(),
+        private readonly deleteMediaFileService: DeleteMediaFileService,
+        private readonly checkUserAccessService: CheckUserAccessService,
     ) {
     }
     
-    @SwaggerInfoDec({ summary: 'Delete media-file' })
-    @DeleteDec(MEDIA_FILES_ROUTE_PATHS.delete)
+    @SwaggerInfo({ summary: 'Delete media-file' })
+    @Delete(MEDIA_FILES_ROUTE_PATHS.delete)
     public async deleteMediaFile(
-        @AuthDec userInfo: UserInfo,
-        @ParamNumDec('id') id: number,
+        @User() userDto: UserDto,
+        @Param('id') id: number,
     ): Promise<MutateRowResult<number>> {
-        await this.checkUserAccessService.checkIsAdmins(userInfo.open_user_id)
+        await this.checkUserAccessService.checkIsAdmins(userDto.open_user_id)
         
         const oldDto = await this.deleteMediaFileService.deleteMediaFileById({
-            initiatorOpenUserId: userInfo.open_user_id,
+            initiatorOpenUserId: userDto.open_user_id,
             id,
         })
         return BuildResponseFormat.mutateRow(oldDto.id)

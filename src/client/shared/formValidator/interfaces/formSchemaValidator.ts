@@ -1,4 +1,4 @@
-import { AppLocale } from '@common/locales'
+import { AppLocaleValue } from '@common/locales'
 import { FormValidateResult } from '@client-shared/formValidator/interfaces/result'
 
 export interface IFormSchemaValidator<
@@ -10,7 +10,7 @@ export interface IFormSchemaValidator<
     type: string
     
     
-    validate(value: unknown, locale?: AppLocale | null): FormValidateResult<ErrorResult,Value>
+    validate(value: unknown, locale?: AppLocaleValue | null): FormValidateResult<ErrorResult,Value>
     
     getValidErrorResult(): ErrorResult
 }

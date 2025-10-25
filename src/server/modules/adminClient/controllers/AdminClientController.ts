@@ -1,30 +1,30 @@
-import { ClientPackagesHtmlBuilder, ControllerDec, GetDec, SendFileByPathDec, SwaggerInfoDec } from 'os-core-ts'
+import { ClientPackagesHtmlBuilder, Controller, Get, SendFileByPath, SwaggerInfo } from 'os-core-ts'
 import fs from 'fs/promises'
 import path from 'path'
 
 import { ADMIN_CLIENT_ROUTE_PATHS } from '@modules/adminClient/constants/routePaths'
 
-@ControllerDec()
+@Controller()
 export class AdminClientController {
-    @SwaggerInfoDec({
+    @SwaggerInfo({
         disable: true,
     })
-    @SendFileByPathDec(ADMIN_CLIENT_ROUTE_PATHS.bundleJs)
+    @SendFileByPath(ADMIN_CLIENT_ROUTE_PATHS.bundleJs)
     public getClientBundle(): string {
         return this.getFilePath('index.js')
     }
-    @SwaggerInfoDec({
+    @SwaggerInfo({
         disable: true,
     })
-    @SendFileByPathDec(ADMIN_CLIENT_ROUTE_PATHS.favicon)
+    @SendFileByPath(ADMIN_CLIENT_ROUTE_PATHS.favicon)
     public getClientFavicon(): string {
         return this.getFilePath('favicon.ico')
     }
     
-    @SwaggerInfoDec({
+    @SwaggerInfo({
         disable: true,
     })
-    @GetDec(ADMIN_CLIENT_ROUTE_PATHS.index)
+    @Get(ADMIN_CLIENT_ROUTE_PATHS.index)
     public async getHtml() {
         const html = await fs.readFile(
             this.getFilePath('index.html'), {

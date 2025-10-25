@@ -1,8 +1,8 @@
 import { IStringFormValidator } from '@client-shared/formValidator/interfaces/string'
-import { AppLocale, DEFAULT_APP_LOCALE } from '@common/locales'
+import { AppLocaleValue, DEFAULT_APP_LOCALE_VALUE } from '@common/locales'
 import { FormValidateErrorResult, FormValidateResult } from '@client-shared/formValidator/interfaces/result'
 
-const MESSAGES: Record<AppLocale, Record<string, string>> = {
+const MESSAGES: Record<AppLocaleValue, Record<string, string>> = {
     uk: {
         invalidType: 'Значення має бути текстом.',
         tooShort: 'Мінімальна довжина символів — {min}.',
@@ -40,8 +40,8 @@ export class StringFormValidator<Value = string> implements IStringFormValidator
         }
     }
     
-    public validate(value: unknown, locale?: AppLocale | null): FormValidateResult<FormValidateErrorResult<string>, Value> {
-        const dict = MESSAGES[locale || DEFAULT_APP_LOCALE]
+    public validate(value: unknown, locale?: AppLocaleValue | null): FormValidateResult<FormValidateErrorResult<string>, Value> {
+        const dict = MESSAGES[locale || DEFAULT_APP_LOCALE_VALUE]
         
         if (typeof value === 'undefined') {
             if (!this.isOptional) {

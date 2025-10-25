@@ -1,0 +1,24 @@
+definitions:
+  steps:
+    - step: &DEV_build_and_push_image_and_deploy
+        services:
+          - docker
+        image: atlassian/default-image:3
+        script:
+          - echo "Starting deployment to $SSH_HOST as $SSH_USER"
+          - echo "Container $DEV_DOCKER_CONTAINER_NAME"
+          - echo "Image $DEV_DOCKER_IMAGE_NAME"
+          - echo "App dir $DEV_APP_DIR"
+          - echo "Starting deployment..."
+          - echo "$SSH_KEY_B64" | base64 -d > ~/.ssh/id_rsa
+          - chmod 600 ~/.ssh/id_rsa
+          - ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST -p $SSH_PORT "cd $DEV_APP_DIR && git pull"
+          - ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST -p $SSH_PORT "docker stop $DEV_DOCKER_CONTAINER_NAME || true"
+          - ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST -p $SSH_PORT "docker rm $DEV_DOCKER_CONTAINER_NAME || true"
+          - ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST -p $SSH_PORT 'docker images --format "{{.Repository}}:{{.Tag}} {{.ID}}" | grep "^'"$DEV_DOCKER_IMAGE_NAME"':" | awk '\''{print $2}'\'' | xargs -r docker rmi'
+          - ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST -p $SSH_PORT "cd $DEV_APP_DIR && docker build -t $DEV_DOCKER_IMAGE_NAME:$BITBUCKET_BUILD_NUMBER ."
+          - ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST -p $SSH_PORT "cd $DEV_APP_DIR && docker run --env-file .env -d --name $DEV_DOCKER_CONTAINER_NAME -p 33000:3000 --net ua_gis_com__js --ip 30.0.0.3 --restart always $DEV_DOCKER_IMAGE_NAME:$BITBUCKET_BUILD_NUMBER"
+pipelines:
+  branches:
+    dev:
+      - step: *DEV_build_and_push_image_and_deploy

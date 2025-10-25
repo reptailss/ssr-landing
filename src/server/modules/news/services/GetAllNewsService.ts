@@ -1,30 +1,31 @@
-import { PaginationQueryParams, PaginationValues } from 'os-core-ts'
-import { newsModel, NewsModel } from '@modules/news/model'
+import { Injectable, PaginationQueryParams, PaginationValues } from 'os-core-ts'
 import { NewsDto } from '@common/dto/newsDto'
-import { AppLocale } from '@common/locales'
+import { AppLocaleValue } from '@common/locales'
+import { NewsRepository } from '@modules/news/repository'
 
+@Injectable()
 export class GetAllNewsService {
-    constructor(private readonly model: NewsModel = newsModel) {
+    constructor(
+        private readonly repository: NewsRepository
+    ) {
     }
     
     public async getNewsPagination(
         params: PaginationQueryParams<NewsDto>,
-        locale?: AppLocale | null,
+        locale?: AppLocaleValue | null,
     ): Promise<PaginationValues<NewsDto>> {
-        return this.model.pagination(params,{
-            filters:{
+        return this.repository.pagination(params, {
                 ...(locale ? { locale } : {}),
-            }
         })
     }
     
-    public getLastNewsList(count: number, locale?: AppLocale | null): Promise<NewsDto[]> {
-        return this.model.findAll({
+    public getLastNewsList(count: number, locale?: AppLocaleValue | null): Promise<NewsDto[]> {
+        return this.repository.findAll({
             limit: count,
             order: {
                 date_add: 'DESC',
             },
-            filters: {
+            where: {
                 ...(locale ? { locale } : {}),
             },
         })

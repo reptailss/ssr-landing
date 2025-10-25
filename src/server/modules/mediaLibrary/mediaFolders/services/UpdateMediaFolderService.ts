@@ -1,13 +1,14 @@
-import { ActionsLoggerService, AppError } from 'os-core-ts'
-import { mediaFoldersModel, MediaFoldersModel } from '@modules/mediaLibrary/mediaFolders/model'
+import { ActionsLoggerService, AppError, Injectable } from 'os-core-ts'
 import { MediaFoldersChecker } from '@modules/mediaLibrary/mediaFolders/checker/MediaFoldersChecker'
 import { MediaFolderDto, UpdateMediaFolderDto } from '@common/dto/mediaFolderDto'
+import { MediaFoldersRepository } from '@modules/mediaLibrary/mediaFolders/repository'
 
+@Injectable()
 export class UpdateMediaFolderService {
     constructor(
-        private readonly model: MediaFoldersModel = mediaFoldersModel,
-        private readonly mediaFoldersChecker: MediaFoldersChecker = new MediaFoldersChecker(),
-        private readonly actionsLoggerService: ActionsLoggerService = new ActionsLoggerService(),
+        private readonly repository: MediaFoldersRepository,
+        private readonly mediaFoldersChecker: MediaFoldersChecker,
+        private readonly actionsLoggerService: ActionsLoggerService,
     ) {
     }
     
@@ -22,7 +23,7 @@ export class UpdateMediaFolderService {
     }): Promise<MediaFolderDto> {
         
         
-        const oldDto = await this.model.findByPk(id)
+        const oldDto = await this.repository.findByPk(id)
         
         if (!oldDto) {
             throw new AppError('Not found.', {
@@ -45,15 +46,14 @@ export class UpdateMediaFolderService {
         }
         
         
-        const newDto = await this.model.update(updateDto, {
-            filters: { id: id },
-            returning: true,
+        const newDto = await this.repository.update(updateDto, {
+            id,
         })
         await this.actionsLoggerService.logUpdateAction({
             oldValue: oldDto,
             newValue: newDto,
             openUserId: initiatorOpenUserId,
-            config: this.model.getConfig(),
+            config: this.repository.getConfig(),
             rowId: id,
         })
         

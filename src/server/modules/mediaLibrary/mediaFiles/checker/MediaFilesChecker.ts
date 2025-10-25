@@ -1,12 +1,13 @@
-import { AppError } from 'os-core-ts'
+import { AppError, Injectable } from 'os-core-ts'
 import { GetMediaFolderService } from '@modules/mediaLibrary/mediaFolders/services/GetMediaFolderService'
-import { mediaFilesModel, MediaFilesModel } from '@modules/mediaLibrary/mediaFiles/model'
+import { MediaFilesRepository } from '@modules/mediaLibrary/mediaFiles/repository'
 
+@Injectable()
 export class MediaFilesChecker {
     
     constructor(
-        private readonly model: MediaFilesModel = mediaFilesModel,
-        private readonly getMediaFolderService: GetMediaFolderService = new GetMediaFolderService(),
+        private readonly repository: MediaFilesRepository,
+        private readonly getMediaFolderService: GetMediaFolderService,
     ) {
     }
     
@@ -30,11 +31,9 @@ export class MediaFilesChecker {
         folderId: number
         name: string
     }): Promise<void> {
-        const dto = await this.model.findOne({
-            filters: {
-                name,
-                folder_id: folderId,
-            },
+        const dto = await this.repository.findOne({
+            name,
+            folder_id: folderId,
         })
         if (dto) {
             throw new AppError('Already exists', {

@@ -3,10 +3,12 @@ import { CONTACT_US_MAX_EMAIL_SEND_COUNT } from '@constants/maxEmailSendedCount'
 import fs from 'fs/promises'
 import path from 'path'
 import { APP_SERVER_CONFIG } from '@config'
+import { Injectable } from 'os-core-ts'
 
+@Injectable()
 export class ContactUsMailer {
     constructor(
-        private readonly multiMailSender: MultiMailSender = new MultiMailSender(),
+        private readonly multiMailSender: MultiMailSender,
     ) {
     }
     

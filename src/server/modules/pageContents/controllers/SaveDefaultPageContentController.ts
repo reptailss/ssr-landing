@@ -1,23 +1,23 @@
 import {
-    AuthDec,
-    BodyDec,
+    Body,
     BuildResponseFormat,
-    ControllerDec,
+    Controller,
     MutateRowResult,
-    PostDec,
+    Post,
     SchemaValidator,
-    SwaggerInfoDec,
-    UserInfo,
+    SwaggerInfo,
+    User,
+    UserDto,
     Validator,
 } from 'os-core-ts'
 import { PAGE_CONTENTS_ROUTE_PATHS } from '@common/apiRoutePaths/pageContentsRoutePaths'
 import { CheckUserAccessService } from '@modules/userAccess/services/CheckUserAccessService'
 import { SavePageDefaultContentService } from '@modules/pageContents/services/SavePageDefaultContentService'
-import { AppLocale } from '@common/locales'
+import { AppLocaleValue } from '@common/locales'
 
 
 type SaveDefaultPageContentBody = {
-    locale: AppLocale
+    locale: AppLocaleValue
     page: string
     key: string
 }
@@ -25,28 +25,28 @@ type SaveDefaultPageContentBody = {
 const saveDefaultPageContentSchema: SchemaValidator<SaveDefaultPageContentBody> = Validator.object({
     page: Validator.string().max(255),
     key: Validator.string().max(255),
-    locale: Validator.string().max(255) as SchemaValidator<AppLocale>,
+    locale: Validator.string().max(255) as SchemaValidator<AppLocaleValue>,
 })
 
-@ControllerDec()
+@Controller()
 export class SaveDefaultPageContentController {
     constructor(
-        private readonly savePageDefaultContentService: SavePageDefaultContentService = new SavePageDefaultContentService(),
-        private readonly checkUserAccessService: CheckUserAccessService = new CheckUserAccessService(),
+        private readonly savePageDefaultContentService: SavePageDefaultContentService,
+        private readonly checkUserAccessService: CheckUserAccessService,
     ) {
     }
     
-    @SwaggerInfoDec({ summary: 'Reset to default page content' })
-    @PostDec(PAGE_CONTENTS_ROUTE_PATHS.resetToDefaultPageContent)
+    @SwaggerInfo({ summary: 'Reset to default page content' })
+    @Post(PAGE_CONTENTS_ROUTE_PATHS.resetToDefaultPageContent)
     public async resetToDefaultPageContent(
-        @BodyDec<SaveDefaultPageContentBody>(saveDefaultPageContentSchema) body: SaveDefaultPageContentBody,
-        @AuthDec userInfo: UserInfo,
+        @Body<SaveDefaultPageContentBody>(saveDefaultPageContentSchema) body: SaveDefaultPageContentBody,
+        @User() userDto: UserDto,
     ): Promise<MutateRowResult<number>> {
         
-        await this.checkUserAccessService.checkIsAdmins(userInfo.open_user_id)
+        await this.checkUserAccessService.checkIsAdmins(userDto.open_user_id)
         
         const dto = await this.savePageDefaultContentService.resetToDefaultPageContent({
-            initiatorOpenUserId: userInfo.open_user_id,
+            initiatorOpenUserId: userDto.open_user_id,
             page: body.page,
             locale: body.locale,
             key: body.key,

@@ -1,10 +1,12 @@
-import { usersModel, UsersModel } from '@modules/users/model'
-import { UpdateUserDto, UserDto } from '@common/dto/userDto'
+import { AppUserDto, UpdateAppUserDto } from '@common/dto/userDto'
+import { UserEntityRepository } from '@modules/users/repository'
+import { Injectable } from 'os-core-ts'
 
+@Injectable()
 export class UpdateUserService {
     
     constructor(
-        private readonly model: UsersModel = usersModel,
+        private readonly repository: UserEntityRepository,
     ) {
     }
     
@@ -14,13 +16,12 @@ export class UpdateUserService {
                                 oldDto,
                             }: {
         initiatorOpenUserId: number
-        updateDto: UpdateUserDto
-        oldDto: UserDto
-    }): Promise<UserDto> {
+        updateDto: UpdateAppUserDto
+        oldDto: AppUserDto
+    }): Promise<AppUserDto> {
         
-        return await this.model.update(updateDto, {
-            filters: { id: oldDto.id },
-            returning: true,
+        return await this.repository.update(updateDto, {
+            id: oldDto.id,
         })
     }
 }

@@ -1,9 +1,13 @@
-import { sharedContentsModel, SharedContentsModel } from '@modules/sharedContents/model'
 import { SharedContentDto } from '@common/dto/sharedContentDto'
-import { AppLocale } from '@common/locales'
+import { AppLocaleValue } from '@common/locales'
+import { SharedContentsRepository } from '@modules/sharedContents/repository'
+import { Injectable } from 'os-core-ts'
 
+@Injectable()
 export class GetSharedContentService {
-    constructor(private readonly model: SharedContentsModel = sharedContentsModel) {
+    constructor(
+        private readonly repository: SharedContentsRepository,
+    ) {
     }
     
     public async getSharedContentByKey({
@@ -11,13 +15,11 @@ export class GetSharedContentService {
                                            locale,
                                        }: {
         key: string,
-        locale?: AppLocale
+        locale?: AppLocaleValue
     }): Promise<SharedContentDto | null> {
-        return this.model.findOne({
-            filters: {
-                key,
-                ...(locale ? { locale } : {}),
-            },
+        return this.repository.findOne({
+            key,
+            ...(locale ? { locale } : {}),
         })
     }
 }

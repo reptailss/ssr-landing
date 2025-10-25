@@ -2,7 +2,7 @@ import { DateField, MultilanguagePostManager, ObjectField, StringField } from 'a
 import { AdminMediaField } from '@admin-fields/AdminMediaField'
 import { BaseCreateFieldsNewsDto, MultilanguageCreateFieldsNewsDto, NewsDto } from '@common/dto/newsDto'
 import { ADMINS_USER_ROLES } from '@common/userRoles'
-import { AppLocales } from '@common/locales'
+import { AppLocaleValues } from '@common/locales'
 import { AdminMultilanguageNewsManagerProvider } from '@admin-providers/AdminMultilanguageNewsManagerProvider'
 import { AdminEditorField } from '@admin-fields/AdminEditorField'
 
@@ -11,7 +11,7 @@ export const adminNewsManager = new MultilanguagePostManager<
     NewsDto,
     BaseCreateFieldsNewsDto,
     MultilanguageCreateFieldsNewsDto,
-    AppLocales
+    AppLocaleValues
 >(
     {
         name: 'news',

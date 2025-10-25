@@ -1,9 +1,10 @@
 import { MailSender } from '@modules/mailSender/impl/MailSender'
-import { appLogger } from 'os-core-ts'
+import { appLogger, Injectable } from 'os-core-ts'
 
+@Injectable()
 export class MultiMailSender {
     
-    constructor(private readonly mailSender: MailSender = new MailSender()) {
+    constructor(private readonly mailSender: MailSender) {
     }
     
     public async send({

@@ -1,11 +1,11 @@
 import {
-    BodyDec,
+    Body,
     BuildResponseFormat,
-    ControllerDec,
+    Controller,
     MutateRowResult,
-    PostDec,
+    Post,
     SchemaValidator,
-    SwaggerInfoDec,
+    SwaggerInfo,
     Validator,
 } from 'os-core-ts'
 import { ContactUsValidator } from '@modules/contactUs/validator/ContactUsValidator'
@@ -26,17 +26,17 @@ const createContactUsBodySchema: SchemaValidator<CreateContactUsBody> = contactU
         recipient_emails: Validator.array(Validator.string().email()),
     }))
 
-@ControllerDec()
+@Controller()
 export class CreateContactUsController {
     constructor(
-        private readonly createContactUsService: CreateContactUsService = new CreateContactUsService(),
+        private readonly createContactUsService: CreateContactUsService,
     ) {
     }
     
-    @SwaggerInfoDec({ summary: 'Add new contactus' })
-    @PostDec(CONTACT_US_ROUTE_PATHS.add)
+    @SwaggerInfo({ summary: 'Add new contactus' })
+    @Post(CONTACT_US_ROUTE_PATHS.add)
     public async createContactUs(
-        @BodyDec(createContactUsBodySchema) body: CreateContactUsBody,
+        @Body(createContactUsBodySchema) body: CreateContactUsBody,
     ): Promise<MutateRowResult<number>> {
         const {
             recipient_emails,
